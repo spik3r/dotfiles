@@ -7,7 +7,7 @@ vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.autoindent = true
 vim.opt.termguicolors = true
-
+vim.opt.inccommand = "split"
 vim.g.mapleader = " "
 
 vim.opt.breakindent = true

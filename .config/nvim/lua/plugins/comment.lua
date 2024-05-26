@@ -6,7 +6,7 @@ return {
      },
      lazy = false,
      config = function ()
-       require('Comment').setup({ ignore = '^$' })
+       require('Comment').setup()
      end
    }
 }

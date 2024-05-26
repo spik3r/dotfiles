@@ -26,12 +26,11 @@ return {}
 --   {
 --     "neovim/nvim-lspconfig",
 --     dependencies = {
---       "nvimtools/none-ls-extras.nvim",
+--       -- "nvimtools/none-ls-extras.nvim",
 --     },
 --     lazy = false,
 --     config = function()
 --       local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
 --       local lspconfig = require("lspconfig")
 --       lspconfig.tsserver.setup({
 --         capabilities = capabilities
@@ -42,7 +41,6 @@ return {}
 --       lspconfig.lua_ls.setup({
 --         capabilities = capabilities
 --       })
-
 --       vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 --       vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
 --       vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})

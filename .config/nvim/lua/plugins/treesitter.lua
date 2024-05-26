@@ -1,5 +1,5 @@
 return {
-  "nureim-treesitter/nvim-treesitter",
+  "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
   event = { "BufReadPost", "BufNewFile" },
   config = function()
@@ -17,11 +17,13 @@ return {
       "yaml",
     }
     config.setup({
+      ignore_install = {},
       ensure_installed = ensure_installed,
       sync_install = false,
       auto_install = true,
       highlight = { enable = true },
       indent = { enable = true },
+      modules = {}
     })
   end
 }
