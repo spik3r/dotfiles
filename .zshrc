@@ -12,6 +12,7 @@ export XDG_CONFIG_HOME=$HOME/.config
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
+export TERM="screen-256color"
 # export ZSH="/Users/kaitait/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
