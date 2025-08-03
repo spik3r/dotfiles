@@ -1,0 +1,323 @@
+# #!/bin/bash
+# # source "$CONFIG_DIR/environment"
+# # source "$THEME_DIR/tokyonight"
+#
+# # Configure general bar appearance.
+# bar=(
+#     blur_radius="$BAR_BLUR_RADIUS"
+#     border_color="$BAR_BORDER_COLOR"
+#     color="$BAR_COLOR"
+#     corner_radius="$BAR_CORNER_RADIUS"
+#     height=46
+#     # height="$BAR_HEIGHT"
+#     margin=16
+#     # margin="$BAR_MARGIN"
+#     position="$BAR_POSITION"
+#     padding_left="$BAR_PADDING"
+#     padding_right="$BAR_PADDING"
+#     y_offset=6
+#     # y_offset="$BAR_Y_OFFSET"
+# )
+# sketchybar --bar "${bar[@]}"
+#
+# # Configure default values for later defined items.
+# default=(
+#   background.color="$BACKGROUND_COLOR"
+#   background.border_color="$BACKGROUND_BORDER_COLOR"
+#   background.corner_radius="$BACKGROUND_CORNER_RADIUS"
+#   background.height="$BACKGROUND_HEIGHT"
+#   icon.drawing=on
+#   icon.font="$ICON_FONT"
+#   icon.color="$ICON_COLOR"
+#   label.align="$LABEL_ALIGN"
+#   label.font="$LABEL_FONT"
+#   label.color="$LABEL_COLOR"
+#   label.highlight_color="$LABEL_HIGHLIGHT_COLOR"
+#   label.y_offset="$LABEL_Y_OFFSET"
+#   label.padding_left="$LABEL_PADDING"
+#   label.padding_right="$LABEL_PADDING"
+#   y_offset=0
+#   # y_offset="$Y_OFFSET"
+# )
+# sketchybar --default "${default[@]}"
+# sketchybar --add event aerospace_workspace_change
+#
+# #!/bin/bash
+#
+# WORKSPACES=($(aerospace list-workspaces --all))
+# ITEMS=()
+#
+# # Configurable sizes
+# ITEM_WIDTH=40
+# ITEM_HEIGHT=26
+# PADDING=10
+# CORNER_RADIUS=12
+#
+# # Calculate background size
+# ITEM_COUNT=${#WORKSPACES[@]}
+# BG_WIDTH=$((ITEM_COUNT * ITEM_WIDTH + PADDING * 2))
+# BG_HEIGHT=$((ITEM_HEIGHT + PADDING))
+#
+# # 1. Add a fake "pill" item that serves as the background
+# sketchybar --add item workspace_pill left \
+#   --set workspace_pill \
+#     width=$BG_WIDTH \
+#     height=$BG_HEIGHT \
+#     background.color=0x22ffffff \
+#     background.border_color=0xffaaaaaa \
+#     background.border_width=2 \
+#     background.corner_radius=$CORNER_RADIUS \
+#     drawing=on \
+#     background.drawing=on \
+#     label.drawing=off \
+#     icon.drawing=off \
+#     y_offset=0 \
+#     z_index=0
+#
+# # 2. Add workspace items
+# for sid in "${WORKSPACES[@]}"; do
+#   item="space.$sid"
+#   ITEMS+=("$item")
+#   sketchybar --add item "$item" left \
+#     --set "$item" \
+#       label="$sid" \
+#       click_script="aerospace workspace $sid" \
+#       script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
+#       icon.drawing=off \
+#       label.padding_left=6 \
+#       label.padding_right=6 \
+#       background.corner_radius=6 \
+#       background.height=$ITEM_HEIGHT \
+#       background.color=0x00000000 \
+#       background.drawing=off \
+#       y_offset=0 \
+#       z_index=10
+# done
+#
+# # 3. Group them using a bracket
+# sketchybar --add bracket workspace_group workspace_pill "${ITEMS[@]}" \
+#   --set workspace_group drawing=on
+#
+# bracket_prop=(
+# 	background.color=$RED
+# 	background.heigh=20
+# )
+#
+# sketchybar 	--add	bracket spaces space.1 space.2 space.3	\
+# 		--set		spaces "${bracket_prop[@]}"
+# sketchybar 	--add	bracket workspace_group workspace_pill "${ITEMS[@]}" \
+# 		--set		workspace_group "${WORKSPACES[@]}"
+#
+# # Add background pill
+# # sketchybar --add item workspace_bg left \
+# #   --set workspace_bg \
+# #     background.color="0xfff7768e" \
+# #     background.border_width=2 \
+# #     background.border_color="0xfff7768e" \
+# #     background.corner_radius=32 \
+# #     background.height=54 \
+# #     background.padding_top=8\
+# #     background.padding_left=8\
+# #     background.padding_right=8\
+# #     width=100\
+# #     drawing=on \
+# #     background.drawing=on \
+# #     label.drawing=on \
+# #     label="bg" \
+# #     label.padding_left=8 \
+# #     label.padding_right=8 \
+# #
+# #     icon.drawing=off \
+# #     z_index=1 \
+# #     background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
+#
+# # Add actual workspace buttons
+# # for sid in "${WORKSPACES[@]}"; do
+# #   item="space.$sid"
+# #   ITEMS+=("$item")
+# #   sketchybar --add item "$item" left \
+# #     --set "$item" \
+# #       label="$sid" \
+# #       click_script="aerospace workspace $sid" \
+# #       script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
+# #       icon.drawing=off \
+# #       label.padding_left=8 \
+# #       label.padding_right=8 \
+# #       background.corner_radius=6 \
+# #       background.height=20 \
+# #       background.drawing=off \
+# #       background.border_width=2 \
+# #       background.color=0x44ffffff \
+# #       background.border_color=0xff888888 \
+# #       y_offset=1 \
+# #       z_index=10
+# # done
+# #
+# # # Add bracket to wrap them
+# # sketchybar --add bracket workspace_bracket workspace_bg "${ITEMS[@]}"
+#
+# # sketchybar --add item test_pill left \
+# #   --set test_pill \
+# #     background.color=0x22ffffff \
+# #     background.border_width=2 \
+# #     background.border_color=0xfff7768e \
+# #     background.corner_radius=12 \
+# #     background.height=36 \
+# #     width=200 \
+# #     label.drawing=off \
+# #     icon.drawing=off \
+# #     drawing=on \
+# #     background.drawing=on \
+# #     z_index=0
+#
+# # Visual pill background
+# # sketchybar --add item workspace_bg left \
+# #   --set workspace_bg \
+# #     background.color=0x22ffffff \
+# #     background.border_width=2 \
+# #     background.border_color=0xfff7768e \
+# #     background.corner_radius=12 \
+# #     background.height=36 \
+# #     background.padding_left=6 \
+# #     background.padding_right=6 \
+# #     width=200 \
+# #     label.drawing=off \
+# #     icon.drawing=off \
+# #     drawing=on \
+# #     background.drawing=on \
+# #     z_index=0
+# #
+# # sketchybar --add item space.1 left \
+# #   --set space.1 label="1" \
+# #     background.color=0x66ffffff \
+# #     background.corner_radius=6 \
+# #     background.drawing=on \
+# #     background.border_width=2 \
+# #     background.border_color=0xff888888 \
+# #     background.height=28 \
+# #     y_offset=1 \
+# #     label.padding_left=10 \
+# #     label.padding_right=10 \
+# #     z_index=1
+# #
+# # WORKSPACES=($(aerospace list-workspaces --all))
+# # ITEMS=()
+# # for sid in "${WORKSPACES[@]}"; do
+# #   item="space.$sid"
+# #   ITEMS+=("$item")
+# #   sketchybar --add item "$item" left \
+# #     --set "$item" \
+# #       label="$sid" \
+# #       click_script="aerospace workspace $sid" \
+# #       script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
+# #       icon.drawing=off \
+# #       label.padding_left=8 \
+# #       label.padding_right=8 \
+# #       background.corner_radius=6 \
+# #       background.height=24 \
+# #       background.drawing=on \
+# #       background.border_width=2 \
+# #       background.color=0x44ffffff \
+# #       background.border_color=0xff888888 \
+# #       y_offset=0 \
+# #       z_index=10
+# # done
+# #
+# # # Group all workspace items under a bracket
+# # sketchybar --add bracket workspace_group $ITEMS
+#
+# # Move background behind the group
+# # sketchybar --move item workspace_bg left
+#
+# # # #!/bin/bash
+# #
+# #
+# #
+# # sketchybar --add event aerospace_workspace_change
+# #
+# # sketchybar --add item workspace_bg left \
+# #   --set workspace_bg \
+# #     background.color=0xfff7768e \
+# #     background.border_width=2 \
+# #     background.border_color=0xfff7768e \
+# #     background.padding_left=8 \
+# #     background.padding_right=8 \
+# #     background.corner_radius=10 \
+# #     background.height=30 \
+# #     width=0 \
+# #     label.drawing=off \
+# #     icon.drawing=off \
+# #     z_index=1
+# #
+# #
+# #
+# # WORKSPACES=($(aerospace list-workspaces --all))
+# # ITEMS=()
+# # for sid in "${WORKSPACES[@]}"; do
+# #   item="space.$sid"
+# #   ITEMS+=("$item")
+# #   sketchybar --add item "$item" left \
+# #     --set "$item" \
+# #       label="$sid" \
+# #       click_script="aerospace workspace $sid" \
+# #       script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
+# #       icon.drawing=off \
+# #       label.padding_left=8 \
+# #       label.padding_right=8 \
+# #       background.corner_radius=6 \
+# #       background.height=24 \
+# #       background.drawing=on \
+# #       background.border_width=2 \
+# #       background.color=0x44ffffff \
+# #       background.border_color=0xff888888 \
+# #       background.padding_left=2 \
+# #       background.padding_right=2 \
+# #       y_offset=0 \
+# #       z_index=10
+# #
+# #       if [[ "$sid" == "$focused" ]]; then
+# #       sketchybar --set "workspace.$sid" background.color=0xff4c566a
+# #       else
+# #       sketchybar --set "workspace.$sid" background.color=0x00000000
+# #       fi
+# # done
+# #
+# # # Add bracket after all items are added
+# # sketchybar --add bracket workspace_bg left\
+# #              --set workspace_bg \
+# #              background.border_color="0xfff7768e" \
+# #              background.corner_radius=12 \
+# #              background.border_width=12
+# #
+# # # for sid in $(aerospace list-workspaces --all); do
+# # # sketchybar --add item space.$sid left \
+# # #              --subscribe space.$sid aerospace_workspace_change \
+# # #              --set space.$sid \
+# # #              z_index=1 \
+# # #              background.color=0x44ffffff \
+# # #              background.corner_radius=5 \
+# # #              background.height=20 \
+# # #              background.drawing=off \
+# # #              label="$sid" \
+# # #              click_script="aerospace workspace $sid" \
+# # #              script="$CONFIG_DIR/plugins/aerospace.sh $sid"\
+# # #              icon.drawing=off \
+# # #              label.padding_left=8 \
+# # #              label.padding_right=8 \
+# # #              background.corner_radius=6 \
+# # #              background.height=24 \
+# # #              background.drawing=on \
+# # #              background.border_width=2 \
+# # #              background.border_color=0xff888888 \
+# # #              y_offset=0
+# # #
+# # # # Highlight active workspace
+# # #              if [[ "$sid" == "$focused" ]]; then
+# # #              sketchybar --set "workspace.$sid" background.color=0xff4c566a
+# # #              else
+# # #              sketchybar --set "workspace.$sid" background.color=0x00000000
+# # #              fi
+# # #              done
+# #
+#              sketchybar --update
+

@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# Load environment and theme
+source "$CONFIG_DIR/environment"
+source "$CONFIG_DIR/current-theme"
+
+# Configure the bar
+sketchybar --bar \
+    height="$BAR_HEIGHT" \
+    color="$BAR_COLOR" \
+    border_color="$BAR_BORDER_COLOR" \
+    corner_radius="$BAR_CORNER_RADIUS" \
+    margin="$BAR_MARGIN" \
+    padding_left="$BAR_PADDING" \
+    padding_right="$BAR_PADDING" \
+    y_offset="$BAR_Y_OFFSET" \
+    blur_radius="$BAR_BLUR_RADIUS" \
+    position="$BAR_POSITION"
+
+# Set default item properties
+sketchybar --default \
+    background.color="$ITEM_BG_COLOR" \
+    background.border_color="$ITEM_BORDER_COLOR" \
+    background.corner_radius="$ITEM_CORNER_RADIUS" \
+    background.height="$ITEM_HEIGHT" \
+    background.drawing=off \
+    icon.font="$ICON_FONT" \
+    icon.color="$ICON_COLOR" \
+    icon.padding_left="$ICON_PADDING" \
+    icon.padding_right="$ICON_PADDING" \
+    label.font="$LABEL_FONT" \
+    label.color="$TEXT_COLOR" \
+    label.padding_left="$LABEL_PADDING" \
+    label.padding_right="$LABEL_PADDING" \
+    label.y_offset="$Y_OFFSET"
+
+# Add aerospace workspace management
+source "$ITEM_DIR/aerospace"
+
+# Add workspace apps display
+source "$ITEM_DIR/front_app"
+
+# Add system info (right side)
+source "$ITEM_DIR/system_info"
+
+# Add theme switcher (right side, before system info)
+source "$ITEM_DIR/theme_switcher"
+
+# Enable hot reload and update
+sketchybar --hotload on
+sketchybar --update
+
+# Initialize aerospace and workspace apps
+sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+sketchybar --trigger workspace_apps_changed

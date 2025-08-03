@@ -1,0 +1,148 @@
+# #!/usr/bin/env bash
+#
+# # export WHITE=0xffffffff
+#
+# # -- Teal Scheme --
+# teal="0xff001f30"
+# # export ITEM_BG_COLOR=0xff003547
+# # export ACCENT_COLOR=0xff2cf9ed
+#
+# # Tokyonight Night Palette
+# black="0xff24283b"
+# blue="0xff7aa2f7"
+# blue1="0xff1a1b26"
+# cyan="0xff7dcfff"
+# green="0xff9ece6a"
+# magenta="0xffbb9af7"
+# orange="0xffff9e64"
+# purple="0xff9d7cd8"
+# red="0xfff7768e"
+# transparent="0x00000000"
+# white="0xffa9b1d6"
+# yellow="0xffe0af68"
+# defaultBg="0x44ffffff"
+# # background.color=0x44ffffff
+# # icon.color=0xffffffff
+# #   label.color=0xffffffff
+# # Bar
+# ## Colors
+# BAR_COLOR="$transparent"
+# # BAR_COLOR="$defaultBg"
+# # BAR_COLOR="$teal"
+# BAR_BLUR_RADIUS=30
+#
+# ## Geometry
+# BAR_POSITION="top"
+# BAR_HEIGHT=32
+# BAR_PADDING=4
+# BAR_Y_OFFSET=12
+# BAR_CORNER_RADIUS=24
+# BAR_MARGIN=12
+#
+# # Item Defaults
+# ## Colors
+# # BACKGROUND_COLOR="$transparent"
+# BACKGROUND_COLOR="$blue1"
+# BACKGROUND_BORDER_COLOR="$blue"
+# BACKGROUND_BORDER_WIDTH=0
+# LABEL_ALIGN="center"
+# # LABEL_COLOR=lue1"
+# LABEL_COLOR="$blue"
+# LABEL_HIGHLIGHT_COLOR="$red"
+#
+# ## Fonts
+# ICON_BASE_FONT="Hack Nerd Font"
+# ICON_FONT="$ICON_BASE_FONT:Bold:17.0"
+# ICON_COLOR="$cyan"
+#
+# LABEL_BASE_FONT="Hack Nerd Font"
+# LABEL_FONT="$LABEL_BASE_FONT:Bold:14.0"
+# LABEL_HIGHLIGHT_FONT="$LABEL_BASE_FONT:Bold:17.0"
+#
+# ## Geometry
+# BACKGROUND_CORNER_RADIUS=4
+# BACKGROUND_HEIGHT=24
+# LABEL_Y_OFFSET=1
+# LABEL_PADDING=6
+# BRACKET_BACKGROUND_BORDER_WIDTH=2
+# BRACKET_BACKGROUND_CORNER_RADIUS=12
+#
+#
+#___
+
+# Tokyo Night Storm – Full Theme
+
+export bar_color=0x3824283b
+
+# Bracket (Pill) Containers
+export bracket_bg=0xff1f2335
+export bracket_border=0xff414868
+export bracket_bg_highlight=0xff33467c
+export pill_highlight_bg=0xff2c3043
+
+# Text
+export label_color=0xffc0caf5
+export label_color_highlight=0xff7aa2f7
+
+# Icons
+export icon_color=0xffa9b1d6
+export icon_color_highlight=0xffbb9af7
+
+#!/usr/bin/env bash
+# Tokyo Night Storm Theme
+# bar_color="0xff24283b"
+# text_color="0xffc0caf5"
+# accent_color="0xff7aa2f7"
+# subtext_color="0xff565f89"
+# dim_color="0xff414868"
+# alert_color="0xfff7768e"
+# success_color="0xff9ece6a"
+# warning_color="0xffe0af68"
+# info_color="0xff7dcfff"
+# highlight_color="0xffbb9af7"
+# background_secondary="0xff1f2335"
+# border_color="0xff1a1b26"
+
+## Colors
+# BAR_COLOR="$bar_color"
+
+# BAR_COLOR="$transparent"
+BAR_BLUR_RADIUS=30
+
+## Geometry
+BAR_POSITION="top"
+BAR_HEIGHT=40 #24
+BAR_PADDING=8
+BAR_Y_OFFSET=0
+# BAR_Y_OFFSET=8
+BAR_CORNER_RADIUS=12
+BAR_MARGIN=8
+# BAR_MARGIN=0
+
+# Item Defaults
+## Colors
+# ACCENT_COLOR="$accent_color"
+# BACKGROUND_HIGHLIGHT_COLOR="$info_color"
+# BACKGROUND_COLOR="$background_secondary"
+# BACKGROUND_BORDER_COLOR="$border_color"
+BACKGROUND_BORDER_WIDTH=20
+LABEL_ALIGN="center"
+# LABEL_COLOR="$text_color"
+# LABEL_HIGHLIGHT_COLOR="$highlight_color"
+
+## Fonts
+
+ICON_BASE_FONT="Hack Nerd Font"
+ICON_FONT="$ICON_BASE_FONT:Bold:16.0"
+ICON_BASE_FONT="Hack Nerd Font"
+LABEL_FONT="$LABEL_BASE_FONT:Bold:16.0"
+LABEL_HIGHLIGHT_FONT="$LABEL_BASE_FONT:Bold:20.0"
+
+## Geometry
+BACKGROUND_CORNER_RADIUS=4
+BACKGROUND_HEIGHT=54 # 24
+LABEL_Y_OFFSET=1
+LABEL_PADDING=8
+LABEL_MARGIN=24
+BRACKET_BACKGROUND_BORDER_WIDTH=2
+BRACKET_BACKGROUND_CORNER_RADIUS=12

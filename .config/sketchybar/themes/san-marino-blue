@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# San Marino Blue Theme - Colors Only
+# Load base defaults first
+source "$CONFIG_DIR/defaults"
+
+# Theme Colors
+export THEME_NAME="San Marino Blue"
+
+# Core Palette
+export BLACK="0xff1a1a2e"
+export WHITE="0xfff0f0f0"
+export RED="0xffff6b6b"
+export GREEN="0xff4ecdc4"
+export BLUE="0xff45b7d1"
+export YELLOW="0xfffeca57"
+export ORANGE="0xffff9ff3"
+export MAGENTA="0xffce93d8"
+export CYAN="0xff4dd0e1"
+export TRANSPARENT="0x00000000"
+
+# BMW San Marino Blue Palette
+export SAN_MARINO_BLUE="0xff1e3a5f"
+export DEEP_OCEAN="0xff0f1419"
+export OCEAN_MIST="0xff2a4a6b"
+export WAVE_FOAM="0xff3d5a7a"
+export CORAL_ACCENT="0xff64b5f6"
+
+# Background Colors
+export BG_PRIMARY="$SAN_MARINO_BLUE"
+export BG_SECONDARY="$DEEP_OCEAN"
+export BG_TERTIARY="$OCEAN_MIST"
+
+# Applied Colors (using defaults for structure)
+export BAR_COLOR="0x${BAR_OPACITY}1e3a5f"
+export BAR_BORDER_COLOR="$BG_TERTIARY"
+
+export ITEM_BG_COLOR="0x${ITEM_OPACITY}1e3a5f"
+export ITEM_BG_COLOR_HIGHLIGHT="0xff1c3052"
+export ITEM_BORDER_COLOR="$BG_TERTIARY"
+export SECTION_BORDER_COLOR="0xff6b8db5"
+
+export TEXT_COLOR="$WHITE"
+export TEXT_HIGHLIGHT_COLOR="$CORAL_ACCENT"
+export ICON_COLOR="$CORAL_ACCENT"
+export ICON_HIGHLIGHT_COLOR="0xff81c784"

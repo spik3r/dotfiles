@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# Catppuccin Mocha Theme - Colors Only
+# Load base defaults first
+source "$CONFIG_DIR/defaults"
+
+# Theme Colors
+export THEME_NAME="Catppuccin Mocha"
+
+# Catppuccin Mocha Palette
+export BLACK="0xff1e1e2e"
+export WHITE="0xffcdd6f4"
+export RED="0xfff38ba8"
+export GREEN="0xffa6e3a1"
+export BLUE="0xff89b4fa"
+export YELLOW="0xfff9e2af"
+export ORANGE="0xfffab387"
+export MAGENTA="0xffcba6f7"
+export CYAN="0xff94e2d5"
+export TRANSPARENT="0x00000000"
+
+# Catppuccin Specific Colors
+export ROSEWATER="0xfff5e0dc"
+export FLAMINGO="0xfff2cdcd"
+export PINK="0xfff5c2e7"
+export MAUVE="0xffcba6f7"
+export LAVENDER="0xffb4befe"
+export SAPPHIRE="0xff74c7ec"
+export SKY="0xff89dceb"
+export TEAL="0xff94e2d5"
+export PEACH="0xfffab387"
+export MAROON="0xffeba0ac"
+
+# Background Colors
+export BG_PRIMARY="0xff1e1e2e"
+export BG_SECONDARY="0xff313244"
+export BG_TERTIARY="0xff45475a"
+
+# Applied Colors (using defaults for structure)
+export BAR_COLOR="0x${BAR_OPACITY}1e1e2e"
+export BAR_BORDER_COLOR="$BG_TERTIARY"
+
+export ITEM_BG_COLOR="0x${ITEM_OPACITY}1e1e2e"
+export ITEM_BG_COLOR_HIGHLIGHT="0xff262637"
+export ITEM_BORDER_COLOR="$BG_TERTIARY"
+export SECTION_BORDER_COLOR="0xff6c7086"
+
+export TEXT_COLOR="$WHITE"
+export TEXT_HIGHLIGHT_COLOR="$MAUVE"
+export ICON_COLOR="$SAPPHIRE"
+export ICON_HIGHLIGHT_COLOR="$PEACH"

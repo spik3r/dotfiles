@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/current-theme"
+
+# Clock with day and date
+sketchybar --add item clock right \
+           --set clock \
+                 icon= \
+                 icon.color="$ICON_COLOR" \
+                 icon.padding_right="$ICON_PADDING" \
+                 label.color="$TEXT_COLOR" \
+                 background.drawing=off \
+                 click_script="open 'x-apple.systempreferences:com.apple.preference.datetime'" \
+                 update_freq=10 \
+                 script="$PLUGIN_DIR/clock.sh"
+
+# Volume with icon and percentage
+sketchybar --add item volume right \
+           --subscribe volume volume_change \
+           --set volume \
+                 icon.color="$ICON_COLOR" \
+                 icon.padding_right="$ICON_PADDING" \
+                 label.color="$TEXT_COLOR" \
+                 label.padding_right="$LABEL_PADDING" \
+                 background.drawing=off \
+                 click_script="open 'x-apple.systempreferences:com.apple.preference.sound'" \
+                 script="$PLUGIN_DIR/volume.sh"
+
+# Battery with icon and percentage
+sketchybar --add item battery right \
+           --subscribe battery system_woke power_source_change \
+           --set battery \
+                 icon.color="$ICON_COLOR" \
+                 icon.padding_right="$ICON_PADDING" \
+                 label.color="$TEXT_COLOR" \
+                 label.padding_right="$LABEL_PADDING" \
+                 background.drawing=off \
+                 click_script="open 'x-apple.systempreferences:com.apple.preference.energysaver'" \
+                 update_freq=120 \
+                 script="$PLUGIN_DIR/battery.sh"
+
+# WiFi
+sketchybar --add item wifi right \
+           --subscribe wifi wifi_change \
+           --set wifi \
+                 icon=󰖩 \
+                 icon.color="$ICON_COLOR" \
+                 icon.padding_right="$ICON_PADDING" \
+                 label.drawing=off \
+                 background.drawing=off \
+                 click_script="open 'x-apple.systempreferences:com.apple.preference.network'" \
+                 update_freq=10 \
+                 script="$PLUGIN_DIR/wifi.sh"
+
+# Group ALL system items including clock in one container
+sketchybar --add bracket system_group wifi battery volume clock \
+           --set system_group \
+                 background.color="$ITEM_BG_COLOR" \
+                  background.border_color="$SECTION_BORDER_COLOR" \                                   background.border_width="$SECTION_BORDER_WIDTH" \
+                 background.corner_radius="$ITEM_CORNER_RADIUS" \
+                  background.padding_left=8 \
+                  background.padding_right=8
+
+# Add right edge spacer for consistent spacing (matches left side)
+sketchybar --add item right_edge_spacer right \
+           --set right_edge_spacer \
+                 icon.drawing=off \
+                 label.drawing=off \
+                 background.drawing=off \
+                 width="$BAR_PADDING"

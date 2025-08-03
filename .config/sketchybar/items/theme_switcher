@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/current-theme"
+
+# Get current theme name
+CURRENT_THEME=$(basename "$(readlink "$CONFIG_DIR/current-theme")" 2>/dev/null || echo "unknown")
+
+# Add theme switcher button on the right side
+sketchybar --add item theme_switcher right \
+           --set theme_switcher \
+                 icon="󰏘" \
+                 icon.color="$ICON_COLOR" \
+                 icon.padding_left="$ICON_PADDING" \
+                 icon.padding_right=4 \
+                 label="Theme" \
+                 label.color="$TEXT_COLOR" \
+                 label.padding_left=4 \
+                 label.padding_right="$LABEL_PADDING" \
+                 background.drawing=on \
+                 background.color="$ITEM_BG_COLOR" \
+                  background.border_color="$SECTION_BORDER_COLOR" \                                   background.border_width="$SECTION_BORDER_WIDTH" \
+                 background.corner_radius="$ITEM_CORNER_RADIUS" \
+                 background.height="$ITEM_HEIGHT" \
+                  background.padding_left=8 \
+                  background.padding_right=8 \                 popup.background.border_width=2 \
+                 popup.background.corner_radius=8 \
+                  popup.background.border_color="$SECTION_BORDER_COLOR" \                 popup.background.color="$ITEM_BG_COLOR" \
+                 popup.blur_radius=20 \
+                 click_script="$PLUGIN_DIR/theme_menu.sh" \
+                 script="$PLUGIN_DIR/theme_switcher.sh"
+
+# Get all available themes and create popup items
+themes=()
+for theme_file in "$CONFIG_DIR/themes"/*; do
+    if [[ -f "$theme_file" && "$(basename "$theme_file")" != "TEMPLATE" ]]; then
+        theme_name=$(basename "$theme_file")
+        themes+=("$theme_name")
+    fi
+done
+
+# Sort themes alphabetically
+IFS=$'\n' themes=($(sort <<<"${themes[*]}"))
+unset IFS
+
+# Add popup items for each theme
+for theme_name in "${themes[@]}"; do
+    # Determine if this is the current theme
+    if [[ "$theme_name" == "$CURRENT_THEME" ]]; then
+        icon="●"
+        icon_color="$ICON_COLOR"
+        label_color="$ICON_COLOR"
+    else
+        icon="○"
+        icon_color="$TEXT_COLOR"
+        label_color="$TEXT_COLOR"
+    fi
+    
+    sketchybar --add item "theme_popup.$theme_name" popup.theme_switcher \
+               --set "theme_popup.$theme_name" \
+                     icon="$icon" \
+                     icon.color="$icon_color" \
+                     icon.padding_left=8 \
+                     icon.padding_right=4 \
+                     label="$theme_name" \
+                     label.color="$label_color" \
+                     label.padding_left=4 \
+                     label.padding_right=8 \
+                     background.corner_radius=4 \
+                     background.height=24 \
+                     background.drawing=off \
+                     click_script="$PLUGIN_DIR/theme_menu.sh $theme_name"
+done

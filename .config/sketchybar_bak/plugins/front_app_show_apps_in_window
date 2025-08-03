@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [ "$SENDER" = "front_app_switched" ]; then
+  apps=$(aerospace list-windows --workspace focused --json |
+    jq -r '.[]."app-name"' |
+    sort -u |
+    paste -sd " · " -)
+
+
+  sketchybar --set "$NAME" label="$apps"
+fi
+
+# if [ "$SENDER" = "front_app_switched" ] && [ ! -z "$INFO" ]; then
+#   sketchybar --set "$NAME" \
+#                    label="$INFO"
+# fi

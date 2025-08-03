@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Only run if we have a front app name
+if [ "$SENDER" = "front_app_switched" ] && [ -n "$INFO" ]; then
+  # Get all windows in the currently focused workspace
+  json=$(aerospace list-windows --workspace focused --json)
+
+  # Extract unique app names excluding the frontmost app
+  other_apps=$(echo "$json" | jq -r '.[]."app-name"' | grep -vFx "$INFO" | sort -u)
+
+  # Join other apps with separator
+  label=$(printf "%s · " $other_apps)
+  label="${label% · }"  # remove trailing separator
+
+  # Update the sketchybar label with only the other apps
+  sketchybar --set "$NAME" label="$label"
+fi
+

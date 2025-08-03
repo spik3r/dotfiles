@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# Sketchybar Base Defaults
+# This file contains all the non-color configuration that themes can override
+
+# Bar Configuration
+export BAR_HEIGHT=56
+export BAR_CORNER_RADIUS=12
+export BAR_MARGIN=8
+export BAR_PADDING=12
+export BAR_Y_OFFSET=8
+export BAR_BLUR_RADIUS=30
+export BAR_POSITION="top"
+
+# Item Defaults
+export ITEM_CORNER_RADIUS=8
+export ITEM_HEIGHT=36
+export ITEM_PADDING=10
+
+# Fonts
+export ICON_FONT="FiraCode Nerd Font:Bold:16.0"
+export LABEL_FONT="FiraCode Nerd Font:Bold:14.0"
+export LABEL_HIGHLIGHT_FONT="FiraCode Nerd Font:Bold:16.0"
+
+# Spacing
+export LABEL_PADDING=8
+export ICON_PADDING=6
+export Y_OFFSET=0
+export ITEM_SPACING=4
+
+# Transparency levels (can be overridden by themes)
+export BAR_OPACITY="88"
+export ITEM_OPACITY="aa"
+
+# Brackets/ Pills
+export BRACKET_BACKGROUND_BORDER_WIDTH=2
+export BRACKET_BACKGROUND_CORNER_RADIUS=12
+export SECTION_BORDER_WIDTH=1

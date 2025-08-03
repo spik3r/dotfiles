@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/tokyonightStorm"
+#
+# FRONT_APP_LABEL_COLOR="$red"
+# FRONT_APP_BACKGROUND_BORDER_COLOR="$red"
+#
+sketchybar --add item front_app_spacer_left left \
+           --set      front_app_spacer_left \
+                      background.drawing=off
+
+sketchybar --add item  front_app left \
+           --subscribe front_app front_app_switched \
+           --set       front_app \
+                       background.drawing=off \
+                       label.color="$label_color" \
+                       background.color="$bracket_bg" \
+                       background.border_color="$bracket_border" \
+                       label.padding_left=10 \
+                       label.padding_right=0 \
+                       script="$PLUGIN_DIR/front_app"
+
+sketchybar --add item pipe_separator left \
+           --set      pipe_separator \
+                      background.drawing=off \
+                      label.color="$bracket_border" \
+                      label.padding_left=6 \
+                      label.font.size=30 \
+                      label.y_offset=-2 \
+                      label="|"
+
+sketchybar --add item  other_app left \
+           --subscribe other_app front_app_switched \
+           --set       other_app \
+                       background.drawing=off \
+                       label.color="$label_color_highlight" \
+                       background.color="$bracket_bg_highlight" \
+                       background.border_color="$bracket_border" \
+                       label.padding_left=10 \
+                       label.padding_right=0 \
+                       script="$PLUGIN_DIR/active_app"
+                       # script="$PLUGIN_DIR/front_app_active_and_others"
+
+sketchybar --add item front_app_spacer_right left \
+           --set      front_app_spacer_right \
+                      background.drawing=off
+
+sketchybar --add bracket front_app_bracket front_app_spacer_left front_app other_app pipe_separator front_app_spacer_right \
+           --set         front_app_bracket \
+                         background.border_color="$bracket_border" \
+                         background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
+                         background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"

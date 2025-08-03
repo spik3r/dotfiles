@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/current-theme"
+
+# Add aerospace workspace change event
+sketchybar --add event aerospace_workspace_change
+
+# Add left edge spacer for proper spacing from screen edge
+sketchybar --add item left_edge_spacer left \
+  --set left_edge_spacer \
+  icon.drawing=off \
+  label.drawing=off \
+  background.drawing=off \
+  width=4
+
+# Define a consistent workspace order (numbers first, then letters)
+# Get all workspaces and sort them in a predictable way
+ALL_WORKSPACES=($(aerospace list-workspaces --all))
+WORKSPACES=()
+
+# Add numeric workspaces first (1-9)
+for ws in 1 2 3 4 5 6 7 8 9; do
+  if [[ " ${ALL_WORKSPACES[*]} " =~ " $ws " ]]; then
+    WORKSPACES+=("$ws")
+  fi
+done
+
+# Add alphabetic workspaces (A-Z)
+for ws in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z; do
+  if [[ " ${ALL_WORKSPACES[*]} " =~ " $ws " ]]; then
+    WORKSPACES+=("$ws")
+  fi
+done
+
+# Add workspace items with proper spacing and centering
+for workspace in "${WORKSPACES[@]}"; do
+  sketchybar --add item "workspace.$workspace" left \
+    --subscribe "workspace.$workspace" aerospace_workspace_change \
+    --set "workspace.$workspace" \
+    label="$workspace" \
+    label.align=center \
+    label.padding_left=8 \
+    label.padding_right=8 \
+    background.drawing=on \
+    icon.drawing=off \
+    background.color="$ITEM_BG_COLOR" \
+    background.border_color="$SECTION_BORDER_COLOR" \
+    background.border_width=1 \
+    background.corner_radius="$ITEM_CORNER_RADIUS" \
+    background.height="$ITEM_HEIGHT" \
+    click_script="aerospace workspace $workspace" \
+    script="$PLUGIN_DIR/aerospace.sh $workspace"
+  done
+
+# Group workspaces in a bracket with consistent background and spacing
+sketchybar --add bracket workspaces "${WORKSPACES[@]/#/workspace.}" \
+  --set workspaces \
+  background.color="$ITEM_BG_COLOR" \
+  background.border_color="$SECTION_BORDER_COLOR" \
+  background.border_width="$SECTION_BORDER_WIDTH" \
+  background.corner_radius="$ITEM_CORNER_RADIUS" \
+  background.padding_left=8 \
+  background.padding_right=8
+# Add spacer after workspaces to prevent overlap
+sketchybar --add item workspace_spacer left \
+  --set workspace_spacer \
+  icon.drawing=off \
+  label.drawing=off \
+  background.drawing=off \
+  width=20

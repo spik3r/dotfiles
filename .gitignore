@@ -1,1 +1,3 @@
-dotfiles/.gitignore
+.DS_Store
+.luarc.json
+lazy-lock.json
