@@ -71,6 +71,11 @@ outer.right =      16
 
 [workspace-to-monitor-force-assignment]
 9 = 'secondary'
+
+# Make Chrome itself float when file dialogs are active (unfortunately no better way)
+# [[on-window-detected]]
+# if.app-id = 'com.google.Chrome'
+# run = 'layout floating'
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
@@ -114,6 +119,10 @@ alt-shift-l = 'move right'
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
 alt-shift-minus = 'resize smart -50'
 alt-shift-equal = 'resize smart +50'
+
+# Grouping commands
+alt-shift-g = 'join-with right'  # Join current window with the one to the right
+alt-shift-c = 'move-mouse monitor-lazy-center'  # Center mouse on monitor
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 alt-1 = 'workspace 1'

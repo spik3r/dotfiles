@@ -6,6 +6,7 @@
 # Bar Configuration
 export BAR_HEIGHT=56
 export BAR_CORNER_RADIUS=12
+export PILL_CORNER_RADIUS=32
 export BAR_MARGIN=8
 export BAR_PADDING=12
 export BAR_Y_OFFSET=8
@@ -15,6 +16,7 @@ export BAR_POSITION="top"
 # Item Defaults
 export ITEM_CORNER_RADIUS=8
 export ITEM_HEIGHT=36
+export PILL_HEIGHT=24
 export ITEM_PADDING=10
 
 # Fonts
@@ -30,7 +32,7 @@ export ITEM_SPACING=4
 
 # Transparency levels (can be overridden by themes)
 export BAR_OPACITY="88"
-export ITEM_OPACITY="aa"
+export ITEM_OPACITY="cc"
 
 # Brackets/ Pills
 export BRACKET_BACKGROUND_BORDER_WIDTH=2

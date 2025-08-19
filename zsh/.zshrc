@@ -71,3 +71,4 @@ source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 chruby ruby-3.4.1 # run chruby to see actual version
 eval "$(zoxide init zsh)"
 export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/dotfiles/tmux:$PATH"

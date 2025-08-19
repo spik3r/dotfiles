@@ -61,7 +61,8 @@ sketchybar --add bracket app_group front_app pipe_separator other_apps \
                  background.color="$ITEM_BG_COLOR" \
                   background.border_color="$SECTION_BORDER_COLOR" \
                   background.border_width="$SECTION_BORDER_WIDTH" \
-                  background.corner_radius="$ITEM_CORNER_RADIUS" \                 background.height="$ITEM_HEIGHT" \
+                  background.corner_radius="$ITEM_CORNER_RADIUS" \
+                  background.height="$ITEM_HEIGHT" \
                   background.clip=0.0 \
 
                   background.padding_left=12 \

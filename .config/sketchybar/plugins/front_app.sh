@@ -13,7 +13,9 @@ if [ "$SENDER" = "front_app_switched" ] && [ -n "$INFO" ]; then
              label="$app_name" \
              background.drawing=on \
              background.color="$ITEM_BG_COLOR_HIGHLIGHT" \
-             background.corner_radius="$ITEM_CORNER_RADIUS" \
-             background.padding_left=4 \
-             background.padding_right=4
+             background.corner_radius="$PILL_CORNER_RADIUS" \
+             background.padding_left=8 \
+             background.padding_right=8 \
+             background.height="$PILL_HEIGHT"
+
 fi
