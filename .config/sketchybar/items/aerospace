@@ -13,58 +13,179 @@ sketchybar --add item left_edge_spacer left \
   background.drawing=off \
   width=4
 
-# Define a consistent workspace order (numbers first, then letters)
-# Get all workspaces and sort them in a predictable way
-ALL_WORKSPACES=($(aerospace list-workspaces --all))
-WORKSPACES=()
+# Detect monitors using system_profiler
+DISPLAY_INFO=$(system_profiler SPDisplaysDataType 2>/dev/null)
 
-# Add numeric workspaces first (1-9)
-for ws in 1 2 3 4 5 6 7 8 9; do
-  if [[ " ${ALL_WORKSPACES[*]} " =~ " $ws " ]]; then
-    WORKSPACES+=("$ws")
-  fi
-done
+# Count actual displays
+HAS_LG=false
+HAS_BUILTIN=false
 
-# Add alphabetic workspaces (A-Z)
-for ws in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z; do
-  if [[ " ${ALL_WORKSPACES[*]} " =~ " $ws " ]]; then
-    WORKSPACES+=("$ws")
-  fi
-done
+if echo "$DISPLAY_INFO" | grep -q "LG"; then
+    HAS_LG=true
+fi
 
-# Add workspace items with proper spacing and centering
-for workspace in "${WORKSPACES[@]}"; do
-  sketchybar --add item "workspace.$workspace" left \
-    --subscribe "workspace.$workspace" aerospace_workspace_change \
-    --set "workspace.$workspace" \
-    label="$workspace" \
-    label.align=center \
-    label.padding_left=8 \
-    label.padding_right=8 \
-    background.drawing=on \
-    icon.drawing=off \
-    background.color="$ITEM_BG_COLOR" \
-    background.border_color="$SECTION_BORDER_COLOR" \
-    background.border_width=1 \
-    background.corner_radius="$ITEM_CORNER_RADIUS" \
-    background.height="$ITEM_HEIGHT" \
-    click_script="aerospace workspace $workspace" \
-    script="$PLUGIN_DIR/aerospace.sh $workspace"
-  done
+if echo "$DISPLAY_INFO" | grep -q "Built-in Liquid Retina"; then
+    HAS_BUILTIN=true
+fi
 
-# Group workspaces in a bracket with consistent background and spacing
-sketchybar --add bracket workspaces "${WORKSPACES[@]/#/workspace.}" \
-  --set workspaces \
-  background.color="$ITEM_BG_COLOR" \
-  background.border_color="$SECTION_BORDER_COLOR" \
-  background.border_width="$SECTION_BORDER_WIDTH" \
-  background.corner_radius="$ITEM_CORNER_RADIUS" \
-  background.padding_left=8 \
-  background.padding_right=8
+# Set monitor configuration
+if [ "$HAS_LG" = true ] && [ "$HAS_BUILTIN" = true ]; then
+    # Two monitors
+    NUM_MONITORS=2
+    AEROSPACE_MONITORS=("1" "2")
+elif [ "$HAS_LG" = true ] || [ "$HAS_BUILTIN" = true ]; then
+    # Single monitor
+    NUM_MONITORS=1
+    AEROSPACE_MONITORS=("1")
+else
+    # Fallback - assume single monitor
+    NUM_MONITORS=1
+    AEROSPACE_MONITORS=("1")
+fi
+
+ALL_WORKSPACE_ITEMS=()
+
+if [ "$NUM_MONITORS" -eq 1 ]; then
+    # Single monitor mode - show all workspaces in one group
+    WORKSPACES=()
+    
+    # Try multiple ways to get workspaces from aerospace
+    if command -v aerospace >/dev/null 2>&1; then
+        # Try --all first
+        WORKSPACES=($(aerospace list-workspaces --all 2>/dev/null))
+        
+        # If that didn't work, try without flags
+        if [ ${#WORKSPACES[@]} -eq 0 ]; then
+            WORKSPACES=($(echo "1 2 3 4 5 A B C"))  # Fallback to common workspaces
+        fi
+    else
+        WORKSPACES=(1 2 3 4 5)
+    fi
+    
+    WORKSPACE_ITEMS=()
+    
+    # Add workspace items for all workspaces
+    for workspace in "${WORKSPACES[@]}"; do
+        item_name="workspace.${workspace}"
+        sketchybar --add item "$item_name" left \
+            --subscribe "$item_name" aerospace_workspace_change \
+            --set "$item_name" \
+            label="$workspace" \
+            label.align=center \
+            label.color="$TEXT_COLOR" \
+            label.padding_left=8 \
+            label.padding_right=8 \
+            background.drawing=on \
+            icon.drawing=off \
+            background.color="$ITEM_BG_COLOR" \
+            background.border_color="$SECTION_BORDER_COLOR" \
+            background.border_width=1 \
+            background.corner_radius="$ITEM_CORNER_RADIUS" \
+            background.height="$ITEM_HEIGHT" \
+            click_script="aerospace workspace $workspace" \
+            script="$PLUGIN_DIR/aerospace.sh $workspace"
+        
+        WORKSPACE_ITEMS+=("$item_name")
+        ALL_WORKSPACE_ITEMS+=("$item_name")
+    done
+    
+    # Group all workspaces in a single bracket
+    if [ ${#WORKSPACE_ITEMS[@]} -gt 0 ]; then
+        sketchybar --add bracket "workspaces_single" "${WORKSPACE_ITEMS[@]}" \
+            --set "workspaces_single" \
+            background.color="$ITEM_BG_COLOR" \
+            background.border_color="$SECTION_BORDER_COLOR" \
+            background.border_width="$SECTION_BORDER_WIDTH" \
+            background.corner_radius="$ITEM_CORNER_RADIUS" \
+            background.padding_left=6 \
+            background.padding_right=6
+    fi
+else
+    # Multi-monitor mode - show per-monitor workspaces with highlighting
+    for monitor_idx in "${!AEROSPACE_MONITORS[@]}"; do
+        monitor="${AEROSPACE_MONITORS[$monitor_idx]}"
+        
+        # Get workspaces for this monitor from aerospace
+        MONITOR_WORKSPACES=()
+        if command -v aerospace >/dev/null 2>&1; then
+            MONITOR_WORKSPACES=($(aerospace list-workspaces --monitor "$monitor" 2>/dev/null))
+        fi
+        
+        if [ ${#MONITOR_WORKSPACES[@]} -gt 0 ]; then
+            # Add monitor label
+            sketchybar --add item "monitor_label_$monitor_idx" left \
+                --subscribe "monitor_label_$monitor_idx" aerospace_workspace_change \
+                --set "monitor_label_$monitor_idx" \
+                label="M$monitor" \
+                label.color="$TEXT_COLOR" \
+                label.font="$LABEL_FONT:Bold:11" \
+                label.padding_left=6 \
+                label.padding_right=6 \
+                icon.drawing=off \
+                background.drawing=on \
+                background.color="$ITEM_BG_COLOR" \
+                background.border_color="$SECTION_BORDER_COLOR" \
+                background.border_width=1 \
+                background.corner_radius="$ITEM_CORNER_RADIUS" \
+                background.height="$ITEM_HEIGHT" \
+                script="$PLUGIN_DIR/monitor_manager.sh"
+            
+            MONITOR_WORKSPACE_ITEMS=("monitor_label_$monitor_idx")
+            
+            # Add workspace items for this monitor
+            for workspace in "${MONITOR_WORKSPACES[@]}"; do
+                item_name="workspace.${monitor_idx}.${workspace}"
+                sketchybar --add item "$item_name" left \
+                    --subscribe "$item_name" aerospace_workspace_change \
+                    --set "$item_name" \
+                    label="$workspace" \
+                    label.align=center \
+                    label.color="$TEXT_COLOR" \
+                    label.padding_left=8 \
+                    label.padding_right=8 \
+                    background.drawing=on \
+                    icon.drawing=off \
+                    background.color="$ITEM_BG_COLOR" \
+                    background.border_color="$SECTION_BORDER_COLOR" \
+                    background.border_width=1 \
+                    background.corner_radius="$ITEM_CORNER_RADIUS" \
+                    background.height="$ITEM_HEIGHT" \
+                    click_script="aerospace workspace $workspace" \
+                    script="$PLUGIN_DIR/aerospace.sh $workspace $monitor_idx"
+                
+                MONITOR_WORKSPACE_ITEMS+=("$item_name")
+                ALL_WORKSPACE_ITEMS+=("$item_name")
+            done
+            
+            # Group workspaces for this monitor in a bracket
+            if [ ${#MONITOR_WORKSPACE_ITEMS[@]} -gt 0 ]; then
+                sketchybar --add bracket "workspaces_monitor_$monitor_idx" "${MONITOR_WORKSPACE_ITEMS[@]}" \
+                    --set "workspaces_monitor_$monitor_idx" \
+                    background.color="$ITEM_BG_COLOR" \
+                    background.border_color="$SECTION_BORDER_COLOR" \
+                    background.border_width="$SECTION_BORDER_WIDTH" \
+                    background.corner_radius="$ITEM_CORNER_RADIUS" \
+                    background.padding_left=6 \
+                    background.padding_right=6
+            fi
+            
+            # Add space between monitors (except after the last one)
+            if [ $monitor_idx -lt $((NUM_MONITORS - 1)) ]; then
+                sketchybar --add item "monitor_spacer_$monitor_idx" left \
+                    --set "monitor_spacer_$monitor_idx" \
+                    icon.drawing=off \
+                    label.drawing=off \
+                    background.drawing=off \
+                    width=12
+            fi
+        fi
+    done
+fi
+
 # Add spacer after workspaces to prevent overlap
 sketchybar --add item workspace_spacer left \
   --set workspace_spacer \
   icon.drawing=off \
   label.drawing=off \
   background.drawing=off \
-  width=20
+  width=16

@@ -33,7 +33,8 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
 			require("diffview").setup({
-				use_icons = false,
+				use_icons = true,
+				enhanced_diff_hl = true,
 			})
 		end,
 	},

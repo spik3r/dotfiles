@@ -35,6 +35,7 @@
   conflictstyle = zdiff3
 
 [mergetool "nvimdiff"]
-  cmd = nvim -d "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+  cmd = nvim -d "$LOCAL" "$MERGED" "$REMOTE"
+  ; cmd = nvim -d "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
   trustExitCode = false
 

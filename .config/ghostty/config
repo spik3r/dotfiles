@@ -1,0 +1,14 @@
+theme = "Tokyonight Storm"
+
+font-size = 19
+font-family = "FiraCode Nerd Font"
+
+background-blur-radius = 20
+background-opacity = 0.8
+background-blur-radius = 20
+
+mouse-hide-while-typing = true
+window-decoration = true
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+macos-option-as-alt = true
+

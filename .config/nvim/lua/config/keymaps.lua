@@ -13,6 +13,30 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 -- end
 
+-- obsidian
+--
+local obsidian = require("obsidian")
+
+-- 🔍 Search your vault with Telescope
+vim.keymap.set("n", "<leader>os", function()
+	require("telescope.builtin").find_files({
+		cwd = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/secondBrain",
+		prompt_title = "Obsidian Search",
+	})
+end, { desc = "Search Obsidian vault" })
+
+vim.keymap.set("n", "<leader>og", function()
+	require("telescope.builtin").live_grep({
+		cwd = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/secondBrain",
+		prompt_title = "Search text in Obsidian vault",
+	})
+end, { desc = "Live Grep Obsidian vault" })
+
+-- 📝 Create & open a new note (prompting for title)
+vim.keymap.set("n", "<leader>on", function()
+	obsidian.new_note()
+end, { desc = "Create new Obsidian note" })
+
 -- Paste AWS credentials
 vim.cmd([[command! -range PasteBelow execute 'normal! j03"addko<Esc>"*pdd']])
 vim.api.nvim_set_keymap("n", "<Leader>3p", ":PasteBelow<CR>", { noremap = true, silent = true })

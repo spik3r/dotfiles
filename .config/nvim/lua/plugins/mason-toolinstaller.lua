@@ -19,6 +19,7 @@ return {
 					"fourmolu",
 					"pyright",
 					"rust_analyzer",
+					"marksman",
 				},
 			})
 		end,

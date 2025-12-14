@@ -68,6 +68,7 @@ return {
 			capabilities = capabilities,
 		})
 
+		lspconfig.marksman.setup({})
 		-- lspconfig.omnisharp.setup({
 		--   capabilities = capabilities,
 		-- })

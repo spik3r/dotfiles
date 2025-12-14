@@ -2,6 +2,9 @@
 
 # San Marino Blue Theme - Colors Only
 # Load base defaults first
+if [ -z "$CONFIG_DIR" ]; then
+    CONFIG_DIR="$(dirname "$0")"
+fi
 source "$CONFIG_DIR/defaults"
 
 # Theme Colors

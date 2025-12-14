@@ -16,5 +16,9 @@ stow -t ~/.config .config
 echo "Stowing aerospace..."
 stow -t ~ aerospace
 
+# Stow starship (from ~/dotfiles/starship) to ~/.config
+# echo "Stowing starship.."
+# stow -t ~/.config starship
+
 echo "Stowing completed!"
 

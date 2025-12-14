@@ -17,6 +17,9 @@ sketchybar --bar \
     blur_radius="$BAR_BLUR_RADIUS" \
     position="$BAR_POSITION"
 
+# Configure display-specific settings
+source "$PLUGIN_DIR/display_config.sh"
+
 # Set default item properties
 sketchybar --default \
     background.color="$ITEM_BG_COLOR" \
@@ -49,6 +52,16 @@ source "$ITEM_DIR/theme_switcher"
 # Enable hot reload and update
 sketchybar --hotload on
 sketchybar --update
+
+# Add workspace monitor update trigger
+sketchybar --add item workspace_monitor_trigger left \
+  --set workspace_monitor_trigger \
+  icon.drawing=off \
+  label.drawing=off \
+  background.drawing=off \
+  width=0 \
+  script="$PLUGIN_DIR/workspace_monitor.sh" \
+  --subscribe workspace_monitor_trigger aerospace_workspace_change
 
 # Initialize aerospace and workspace apps
 sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
