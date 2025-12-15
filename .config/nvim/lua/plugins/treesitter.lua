@@ -10,6 +10,8 @@ return {
 				"lua",
 				"typescript",
 				"c_sharp",
+				"terraform",
+				"hcl",
 			},
 			sync_install = false,
 			auto_install = true,

@@ -67,20 +67,21 @@ return {
 		lspconfig.pyright.setup({
 			capabilities = capabilities,
 		})
+		lspconfig.terraformls.setup({
+			capabilities = capabilities,
+		})
 
 		lspconfig.marksman.setup({})
+
 		-- lspconfig.omnisharp.setup({
-		--   capabilities = capabilities,
+		-- 	cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+		-- 	capabilities = require("cmp_nvim_lsp").default_capabilities(),
+		-- 	on_attach = function(client, bufnr)
+		-- 		-- Key mappings for OmniSharp
+		-- 		vim.keymap.set("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { buffer = bufnr })
+		-- 		vim.keymap.set("n", "<leader>gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", { buffer = bufnr })
+		-- 	end,
 		-- })
-		lspconfig.omnisharp.setup({
-			cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-			capabilities = require("cmp_nvim_lsp").default_capabilities(),
-			on_attach = function(client, bufnr)
-				-- Key mappings for OmniSharp
-				vim.keymap.set("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { buffer = bufnr })
-				vim.keymap.set("n", "<leader>gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", { buffer = bufnr })
-			end,
-		})
 
 		-- Autocommand to handle LSP key mappings when LSP attaches to buffer
 		vim.api.nvim_create_autocmd("LspAttach", {
