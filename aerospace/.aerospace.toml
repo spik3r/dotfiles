@@ -48,11 +48,17 @@ inner.horizontal = 16
 inner.vertical =   16
 outer.left =       16
 outer.bottom =     16
-outer.top =        44
+# outer.top =        44
 outer.right =      16
 
+outer.top =     [
+  { monitor.'built-in.*' = 44 },
+  64
+]
+
+# https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [workspace-to-monitor-force-assignment]
-9 = 'secondary'
+9 = ['Built-in Retina Display']
 
 # Make Chrome itself float when file dialogs are active (unfortunately no better way)
 # [[on-window-detected]]
@@ -138,6 +144,7 @@ alt-b = 'workspace B' # for Browser
 alt-c = 'workspace C' # for Calendar / Teams
 alt-d = 'workspace D' # for Docker / DBMS
 alt-o = 'workspace O' # for Obsidian /Notes
+alt-m = 'workspace M' # for Slack / Messages
 
 alt-r = 'workspace R' # for Rider
 alt-s = 'workspace S' # for PrusaSlicer / System settings / vpn...
@@ -155,6 +162,7 @@ cmd-ctrl-alt-shift-b =[ 'move-node-to-workspace B', 'workspace B']  # for Browse
 cmd-ctrl-alt-shift-c =[ 'move-node-to-workspace C', 'workspace C']  # for Calendar / Teams
 cmd-ctrl-alt-shift-d =[ 'move-node-to-workspace D', 'workspace D']  # for Docker / DBMS
 cmd-ctrl-alt-shift-o =[ 'move-node-to-workspace O', 'workspace O']  # for Obsidian/ Notes
+cmd-ctrl-alt-shift-m =[ 'move-node-to-workspace M', 'workspace M']  # for Slack / Messages
 
 cmd-ctrl-alt-shift-r =[ 'move-node-to-workspace R', 'workspace R']  # for Rider
 cmd-ctrl-alt-shift-s =[ 'move-node-to-workspace S', 'workspace S']  # for PrusaSlicer / system settings / vpn..
@@ -163,7 +171,14 @@ cmd-ctrl-alt-shift-v =[ 'move-node-to-workspace V', 'workspace V']  # for vscode
 
 
 alt-tab = 'workspace-back-and-forth'
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+alt-shift-tab = [
+  'move-workspace-to-monitor --wrap-around next',
+  'exec-and-forget sketchybar --trigger change-workspace-monitor FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE TARGET_MONITOR=$(aerospace list-monitors --focused --format "%{monitor-appkit-nsscreen-screens-id}")',
+  'exec-and-forget osascript -e "display notification $(aerospace list-workspaces --focused) with title \"Active Workspace\""',
+  'exec-and-forget osascript -e "display notification $(aerospace list-monitors --focused --format \"%{monitor-appkit-nsscreen-screens-id}\") with title \"Active Monitor\""',
+
+# aerospace list-windows --workspace T --format "%{monitor-appkit-nsscreen-screens-id}"
+]
 
 
 alt-shift-semicolon = [

@@ -22,6 +22,14 @@ if [ "$SENDER" = "aerospace_service_mode_enabled_changed" ]; then
   fi
 fi
 
+if [ "$SENDER" = "change-workspace-monitor" ]; then
+    sketchybar --set $NAME \
+                     label.highlight=on \
+                     background.color="red" \
+                     label.color="$label_color_highlight" \
+                     background.drawing=on
+fi
+
 if [ "$SENDER" = "aerospace_workspace_change" ]; then
   if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
     sketchybar --set $NAME \

@@ -72,3 +72,10 @@ chruby ruby-3.4.1 # run chruby to see actual version
 eval "$(zoxide init zsh)"
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/dotfiles/tmux:$PATH"
+
+# bun completions
+[ -s "/Users/kaitait/.bun/_bun" ] && source "/Users/kaitait/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

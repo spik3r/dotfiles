@@ -25,13 +25,13 @@ if [ "$SENDER" = "aerospace_workspace_change" ]; then
             MONITOR_IDX=0
         fi
     fi
-    
+
     # Get focused workspace from aerospace
     CURRENT_FOCUSED=""
     if command -v aerospace >/dev/null 2>&1; then
         CURRENT_FOCUSED=$(aerospace list-workspaces --focused 2>/dev/null)
     fi
-    
+
     # Also check if this workspace has windows
     HAS_WINDOWS=false
     if command -v aerospace >/dev/null 2>&1; then
@@ -40,7 +40,7 @@ if [ "$SENDER" = "aerospace_workspace_change" ]; then
             HAS_WINDOWS=true
         fi
     fi
-    
+
     # Update workspace appearance
     if [ "$WORKSPACE" = "$CURRENT_FOCUSED" ]; then
         # Highlight active workspace
@@ -87,7 +87,7 @@ if [ "$SENDER" = "aerospace_workspace_change" ]; then
                 fi
             done
         fi
-        
+
         if [ -n "$FOCUSED_MONITOR" ]; then
             "$PLUGIN_DIR/monitor_manager.sh" highlight "$FOCUSED_MONITOR"
         fi

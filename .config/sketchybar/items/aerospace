@@ -4,6 +4,7 @@ source "$CONFIG_DIR/current-theme"
 
 # Add aerospace workspace change event
 sketchybar --add event aerospace_workspace_change
+sketchybar --add event change-workspace-monitor
 
 # Add left edge spacer for proper spacing from screen edge
 sketchybar --add item left_edge_spacer left \
@@ -48,12 +49,12 @@ ALL_WORKSPACE_ITEMS=()
 if [ "$NUM_MONITORS" -eq 1 ]; then
     # Single monitor mode - show all workspaces in one group
     WORKSPACES=()
-    
+
     # Try multiple ways to get workspaces from aerospace
     if command -v aerospace >/dev/null 2>&1; then
         # Try --all first
         WORKSPACES=($(aerospace list-workspaces --all 2>/dev/null))
-        
+
         # If that didn't work, try without flags
         if [ ${#WORKSPACES[@]} -eq 0 ]; then
             WORKSPACES=($(echo "1 2 3 4 5 A B C"))  # Fallback to common workspaces
@@ -61,9 +62,9 @@ if [ "$NUM_MONITORS" -eq 1 ]; then
     else
         WORKSPACES=(1 2 3 4 5)
     fi
-    
+
     WORKSPACE_ITEMS=()
-    
+
     # Add workspace items for all workspaces
     for workspace in "${WORKSPACES[@]}"; do
         item_name="workspace.${workspace}"
@@ -84,11 +85,11 @@ if [ "$NUM_MONITORS" -eq 1 ]; then
             background.height="$ITEM_HEIGHT" \
             click_script="aerospace workspace $workspace" \
             script="$PLUGIN_DIR/aerospace.sh $workspace"
-        
+
         WORKSPACE_ITEMS+=("$item_name")
         ALL_WORKSPACE_ITEMS+=("$item_name")
     done
-    
+
     # Group all workspaces in a single bracket
     if [ ${#WORKSPACE_ITEMS[@]} -gt 0 ]; then
         sketchybar --add bracket "workspaces_single" "${WORKSPACE_ITEMS[@]}" \
@@ -104,13 +105,13 @@ else
     # Multi-monitor mode - show per-monitor workspaces with highlighting
     for monitor_idx in "${!AEROSPACE_MONITORS[@]}"; do
         monitor="${AEROSPACE_MONITORS[$monitor_idx]}"
-        
+
         # Get workspaces for this monitor from aerospace
         MONITOR_WORKSPACES=()
         if command -v aerospace >/dev/null 2>&1; then
             MONITOR_WORKSPACES=($(aerospace list-workspaces --monitor "$monitor" 2>/dev/null))
         fi
-        
+
         if [ ${#MONITOR_WORKSPACES[@]} -gt 0 ]; then
             # Add monitor label
             sketchybar --add item "monitor_label_$monitor_idx" left \
@@ -129,9 +130,9 @@ else
                 background.corner_radius="$ITEM_CORNER_RADIUS" \
                 background.height="$ITEM_HEIGHT" \
                 script="$PLUGIN_DIR/monitor_manager.sh"
-            
+
             MONITOR_WORKSPACE_ITEMS=("monitor_label_$monitor_idx")
-            
+
             # Add workspace items for this monitor
             for workspace in "${MONITOR_WORKSPACES[@]}"; do
                 item_name="workspace.${monitor_idx}.${workspace}"
@@ -152,11 +153,11 @@ else
                     background.height="$ITEM_HEIGHT" \
                     click_script="aerospace workspace $workspace" \
                     script="$PLUGIN_DIR/aerospace.sh $workspace $monitor_idx"
-                
+
                 MONITOR_WORKSPACE_ITEMS+=("$item_name")
                 ALL_WORKSPACE_ITEMS+=("$item_name")
             done
-            
+
             # Group workspaces for this monitor in a bracket
             if [ ${#MONITOR_WORKSPACE_ITEMS[@]} -gt 0 ]; then
                 sketchybar --add bracket "workspaces_monitor_$monitor_idx" "${MONITOR_WORKSPACE_ITEMS[@]}" \
@@ -168,7 +169,7 @@ else
                     background.padding_left=6 \
                     background.padding_right=6
             fi
-            
+
             # Add space between monitors (except after the last one)
             if [ $monitor_idx -lt $((NUM_MONITORS - 1)) ]; then
                 sketchybar --add item "monitor_spacer_$monitor_idx" left \
