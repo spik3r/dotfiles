@@ -39,6 +39,8 @@ alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
+alias python='python3'
+alias lvim='XDG_CONFIG_HOME=/Users/kaitait/dotfiles/.config NVIM_APPNAME=nvim-lazyvim nvim' # LazyVim sandbox
 alias vk='NVIM_APPNAME=nvim-kickstart nvim' # Kickstart
 alias va='NVIM_APPNAME=nvim-ai nvim' # Claude generated config
 
