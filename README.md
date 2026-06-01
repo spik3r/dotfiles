@@ -31,7 +31,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 - AeroSpace: `~/.aerospace.toml`
 - Borders: `~/.config/borders/bordersrc`
 - Ghostty: `~/.config/ghostty/config`
-- Git: `~/.gitconfig`
 - LazyGit: `~/.config/lazygit/config.yml`
 - LazyVim: `~/.config/nvim`
 - SketchyBar: `~/.config/sketchybar`

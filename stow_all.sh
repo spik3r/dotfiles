@@ -6,9 +6,6 @@ mkdir -p "$HOME/.config"
 echo "Stowing zsh local setup..."
 stow -t "$HOME" zsh
 
-echo "Stowing git config..."
-stow -t "$HOME" git
-
 echo "Stowing app configs..."
 stow -t "$HOME/.config" .config
 
