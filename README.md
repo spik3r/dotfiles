@@ -10,6 +10,8 @@ xcode-select --install
 eval "$(/opt/homebrew/bin/brew shellenv)"
 brew bundle
 ./stow_all.sh
+brew services start sketchybar
+brew services start borders
 ```
 
 Add this to `~/.zshrc`:

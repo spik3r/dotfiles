@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+
 # Load environment and theme
 source "$CONFIG_DIR/environment"
 source "$CONFIG_DIR/current-theme"
@@ -54,4 +56,6 @@ sketchybar --hotload on
 sketchybar --update
 
 # Initialize aerospace workspaces
-sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+if command -v aerospace >/dev/null 2>&1; then
+    sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
+fi

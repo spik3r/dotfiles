@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 if [ "$SENDER" = "front_app_switched" ] && [ -n "$INFO" ]; then
+  if ! command -v jq >/dev/null 2>&1 || ! command -v aerospace >/dev/null 2>&1; then
+    sketchybar --set pipe_separator label.drawing=off
+    sketchybar --set other_apps label.drawing=off
+    exit 0
+  fi
+
   # Get all windows in the currently focused workspace
   if [ -n "$json" ]; then
     # Use provided json (for testing)
@@ -32,4 +38,3 @@ if [ "$SENDER" = "front_app_switched" ] && [ -n "$INFO" ]; then
     sketchybar --set other_apps label.drawing=off
   fi
 fi
-
