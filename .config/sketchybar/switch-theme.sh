@@ -39,13 +39,7 @@ switch_theme() {
     
     # Create/update symlink to current theme
     ln -sf "$THEME_DIR/$theme" "$CONFIG_DIR/current-theme"
-    
-    # Update main config to use current-theme
-    sed -i '' 's|themes/[^"]*|current-theme|g' "$CONFIG_DIR/sketchybarrc"
-    
-    # Update all plugin scripts to use current-theme
-    find "$CONFIG_DIR/plugins" -name "*.sh" -exec sed -i '' 's|themes/[^"]*|current-theme|g' {} \;
-    
+
     echo "Switched to theme: $theme"
     echo "Reloading sketchybar..."
     

@@ -1,23 +1,15 @@
 #!/bin/bash
 
-# Colors taken from tokyonight theme
-red=0xfff7768e
-blue=0xff7aa2f7
 SAN_MARINO_BLUE=0xff1e3a5f
-DEEP_OCEAN=0xff0f1419
-OCEAN_MIST=0xff2a4a6b
-WAVE_FOAM=0xff3d5a7a
 CORAL_ACCENT=0xff64b5f6
-
-abc=ff0000
-
+INACTIVE_BLUE=0xff3d5a7a
 
 options=(
-	style=round
-	width=6.0
-	hidpi=on
+  style=round
+  width=3.0
+  hidpi=on
   active_color=$CORAL_ACCENT
-  inactive_color=$SAN_MARINO_BLUE
-  )
+  inactive_color=$INACTIVE_BLUE
+)
 
 borders "${options[@]}"

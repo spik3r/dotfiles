@@ -2,25 +2,6 @@
 
 source "$CONFIG_DIR/current-theme"
 
-# # Add workspace apps display positioned to avoid camera island
-# sketchybar --add item workspace_apps left \
-#            --subscribe workspace_apps front_app_switched aerospace_workspace_change \
-#            --set workspace_apps \
-#                  icon.drawing=off \
-#                  label.color="$TEXT_COLOR" \
-#                  label.padding_left="$LABEL_PADDING" \
-#                  label.padding_right="$LABEL_PADDING" \
-#                  background.drawing=on \
-#                  background.color="$ITEM_BG_COLOR" \
-#                  background.border_color="$SECTION_BORDER_COLOR" \
-#                  background.border_width="$SECTION_BORDER_WIDTH" \
-#                  background.corner_radius="$ITEM_CORNER_RADIUS" \
-#                  background.height="$ITEM_HEIGHT" \
-#                  background.padding_left="$ITEM_PADDING" \
-#                  background.padding_right="$ITEM_PADDING" \
-#                  script="$PLUGIN_DIR/workspace_apps.sh"
-
-# Add spacer after workspace apps to ensure proper spacing
 # Add front app (active app) with highlighting
 sketchybar --add item front_app left \
            --subscribe front_app front_app_switched \
@@ -33,20 +14,10 @@ sketchybar --add item front_app left \
                  background.height=32 \
                  script="$PLUGIN_DIR/front_app.sh"
 
-sketchybar --add item active_monitor left \
-           --subscribe active_monitor change-workspace-monitor \
-           --set active_monitor \
-                 icon.drawing=off \
-                 label.color="$TEXT_HIGHLIGHT_COLOR" \
-                 label.padding_left=8 \
-                 label.padding_right=8 \
-                 background.drawing=on \
-                 background.height=32 \
-                 script="$PLUGIN_DIR/front_app.sh"
 # Add pipe separator
 sketchybar --add item pipe_separator left \
            --set pipe_separator \
-                 icon.drawing=off \
+                  icon.drawing=off \
                   label="│" \
                   label.color="0x66$(echo $TEXT_COLOR | cut -c4-)" \
                   label.padding_left=8 \
@@ -65,18 +36,19 @@ sketchybar --add item other_apps left \
                  script="$PLUGIN_DIR/other_apps.sh"
 
 # Group all app items in a bracket with unified styling
-sketchybar --add bracket app_group active_monitor front_app pipe_separator other_apps \
+sketchybar --add bracket app_group front_app pipe_separator other_apps \
            --set app_group \
-                 background.drawing=on \
-                 background.color="$ITEM_BG_COLOR" \
+                  background.drawing=on \
+                  background.color="$ITEM_BG_COLOR" \
                   background.border_color="$SECTION_BORDER_COLOR" \
                   background.border_width="$SECTION_BORDER_WIDTH" \
                   background.corner_radius="$ITEM_CORNER_RADIUS" \
                   background.height="$ITEM_HEIGHT" \
                   background.clip=0.0 \
-
                   background.padding_left=12 \
-                  background.padding_right=12# Add spacer after app group to ensure proper spacing
+                  background.padding_right=12
+
+# Add spacer after app group to ensure proper spacing
 sketchybar --add item apps_spacer left \
            --set apps_spacer \
                  icon.drawing=off \

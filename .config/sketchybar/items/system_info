@@ -55,9 +55,10 @@ sketchybar --add item wifi right \
 # Group ALL system items including clock in one container
 sketchybar --add bracket system_group wifi battery volume clock \
            --set system_group \
-                 background.color="$ITEM_BG_COLOR" \
-                  background.border_color="$SECTION_BORDER_COLOR" \                                   background.border_width="$SECTION_BORDER_WIDTH" \
-                 background.corner_radius="$ITEM_CORNER_RADIUS" \
+                  background.color="$ITEM_BG_COLOR" \
+                  background.border_color="$SECTION_BORDER_COLOR" \
+                  background.border_width="$SECTION_BORDER_WIDTH" \
+                  background.corner_radius="$ITEM_CORNER_RADIUS" \
                   background.padding_left=8 \
                   background.padding_right=8
 

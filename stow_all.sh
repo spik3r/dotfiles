@@ -1,24 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Stow tmux to the home directory
-echo "Stowing tmux..."
-stow -t ~ tmux
+mkdir -p "$HOME/.config"
 
-# Stow zsh to the home directory (for .zshrc and .zprofile)
-echo "Stowing zsh..."
-stow -t ~ zsh
+echo "Stowing zsh local setup..."
+stow -t "$HOME" zsh
 
-# Stow neovim (from ~/dotfiles/.config) to ~/.config
-echo "Stowing .config..."
-stow -t ~/.config .config
+echo "Stowing git config..."
+stow -t "$HOME" git
 
-# Stow aerospace to the home directory
-echo "Stowing aerospace..."
-stow -t ~ aerospace
+echo "Stowing app configs..."
+stow -t "$HOME/.config" .config
 
-# Stow starship (from ~/dotfiles/starship) to ~/.config
-# echo "Stowing starship.."
-# stow -t ~/.config starship
+echo "Stowing AeroSpace..."
+stow -t "$HOME" aerospace
 
-echo "Stowing completed!"
-
+echo "Stowing complete. Add this to ~/.zshrc if it is not already present:"
+echo '[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"'

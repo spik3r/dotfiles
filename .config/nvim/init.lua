@@ -1,9 +1,4 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-require("config.lazy")
+vim.g.maplocalleader = "\\"
 
-require("config.options")
-require("config.keymaps")
-require("config.terminal")
--- my diff plugin
-require("foo.foo").setup()
+require("config.lazy")

@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-if [ "$SENDER" = "front_app_switched" ] && [ ! -z "$INFO" ]; then
-  sketchybar --set "$NAME" \
-                   label="$INFO"
-fi

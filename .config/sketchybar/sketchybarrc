@@ -53,16 +53,5 @@ source "$ITEM_DIR/theme_switcher"
 sketchybar --hotload on
 sketchybar --update
 
-# Add workspace monitor update trigger
-sketchybar --add item workspace_monitor_trigger left \
-  --set workspace_monitor_trigger \
-  icon.drawing=off \
-  label.drawing=off \
-  background.drawing=off \
-  width=0 \
-  script="$PLUGIN_DIR/workspace_monitor.sh" \
-  --subscribe workspace_monitor_trigger aerospace_workspace_change
-
-# Initialize aerospace and workspace apps
+# Initialize aerospace workspaces
 sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
-sketchybar --trigger workspace_apps_changed

@@ -15,19 +15,21 @@ sketchybar --add item theme_switcher right \
                  label="Theme" \
                  label.color="$TEXT_COLOR" \
                  label.padding_left=4 \
-                 label.padding_right="$LABEL_PADDING" \
-                 background.drawing=on \
-                 background.color="$ITEM_BG_COLOR" \
-                  background.border_color="$SECTION_BORDER_COLOR" \                                   background.border_width="$SECTION_BORDER_WIDTH" \
-                 background.corner_radius="$ITEM_CORNER_RADIUS" \
-                 background.height="$ITEM_HEIGHT" \
+                  label.padding_right="$LABEL_PADDING" \
+                  background.drawing=on \
+                  background.color="$ITEM_BG_COLOR" \
+                  background.border_color="$SECTION_BORDER_COLOR" \
+                  background.border_width="$SECTION_BORDER_WIDTH" \
+                  background.corner_radius="$ITEM_CORNER_RADIUS" \
+                  background.height="$ITEM_HEIGHT" \
                   background.padding_left=8 \
-                  background.padding_right=8 \                 popup.background.border_width=2 \
-                 popup.background.corner_radius=8 \
-                  popup.background.border_color="$SECTION_BORDER_COLOR" \                 popup.background.color="$ITEM_BG_COLOR" \
-                 popup.blur_radius=20 \
-                 click_script="$PLUGIN_DIR/theme_menu.sh" \
-                 script="$PLUGIN_DIR/theme_switcher.sh"
+                  background.padding_right=8 \
+                  popup.background.border_width=2 \
+                  popup.background.corner_radius=8 \
+                  popup.background.border_color="$SECTION_BORDER_COLOR" \
+                  popup.background.color="$ITEM_BG_COLOR" \
+                  popup.blur_radius=20 \
+                  click_script="$PLUGIN_DIR/theme_menu.sh"
 
 # Get all available themes and create popup items
 themes=()
