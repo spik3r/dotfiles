@@ -45,3 +45,17 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 - Start AeroSpace once; it starts SketchyBar and Borders from `after-startup-command`.
 - Run `nvim` once so LazyVim can install plugins.
 - Run `zellij` to start the terminal multiplexer.
+
+## macOS Settings
+
+- Hide the menu bar: `System Settings > Control Centre > Automatically hide and show the menu bar > Always`.
+- AeroSpace windows setting: `System Settings > Desktop & Dock > Mission Control > Displays have separate Spaces > On`.
+- Recommended for window managers: `System Settings > Desktop & Dock > Mission Control > Automatically rearrange Spaces based on most recent use > Off`.
+- Recommended for window managers: `System Settings > Desktop & Dock > Mission Control > When switching to an application, switch to a Space with open windows for the application > Off`.
+
+Terminal equivalent for hiding the menu bar:
+
+```bash
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
+killall Finder
+```
