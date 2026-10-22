@@ -1,1 +1,2 @@
-dotfiles/.gitignore
+.DS_Store
+.luarc.json

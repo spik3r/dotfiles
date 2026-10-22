@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# THEME_NAME Theme - Colors Only
+# Load base defaults first
+source "$CONFIG_DIR/defaults"
+
+# Theme Colors
+export THEME_NAME="Your Theme Name"
+
+# Core Palette (customize these)
+export BLACK="0xff000000"
+export WHITE="0xffffffff"
+export RED="0xffff0000"
+export GREEN="0xff00ff00"
+export BLUE="0xff0000ff"
+export YELLOW="0xffffff00"
+export ORANGE="0xffffa500"
+export MAGENTA="0xffff00ff"
+export CYAN="0xff00ffff"
+export TRANSPARENT="0x00000000"
+
+# Background Colors (customize these)
+export BG_PRIMARY="0xff1a1a1a"
+export BG_SECONDARY="0xff2a2a2a"
+export BG_TERTIARY="0xff3a3a3a"
+
+# Applied Colors (using defaults for structure - only change the color values)
+export BAR_COLOR="0x${BAR_OPACITY}1a1a1a"  # Change the hex part after BAR_OPACITY
+export BAR_BORDER_COLOR="$BG_TERTIARY"
+
+export ITEM_BG_COLOR="0x${ITEM_OPACITY}1a1a1a"  # Change the hex part after ITEM_OPACITY
+export ITEM_BG_COLOR_HIGHLIGHT="$BG_TERTIARY"
+export ITEM_BORDER_COLOR="$BG_TERTIARY"
+
+export TEXT_COLOR="$WHITE"
+export TEXT_HIGHLIGHT_COLOR="$BLUE"
+export ICON_COLOR="$CYAN"
+export ICON_HIGHLIGHT_COLOR="$ORANGE"
+
+# Optional: Override any defaults if needed
+# export BAR_HEIGHT=50  # Uncomment to override default bar height
+# export ICON_FONT="SF Pro:Bold:16.0"  # Uncomment to override default font
