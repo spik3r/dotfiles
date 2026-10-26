@@ -2,6 +2,6 @@
 
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-if [[ -r "$HOME/dotfiles/zsh/.zshrc.local" ]]; then
-  source "$HOME/dotfiles/zsh/.zshrc.local"
+if [[ -r "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
 fi

@@ -4,15 +4,55 @@ Lean macOS setup using GNU Stow.
 
 ## Install
 
+Install the Xcode Command Line Tools first and wait for the installer to finish:
+
 ```bash
 xcode-select --install
+```
+
+Install Homebrew if it is not already installed:
+
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+Load Homebrew, clone the `cleanup` branch, and install the apps and CLI tools.
+You can keep the checkout anywhere; leave it in place after linking the configs.
+
+```bash
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+git clone --branch cleanup https://github.com/spik3r/dotfiles.git "$HOME/dotfiles"
+cd "$HOME/dotfiles"
 brew bundle
 ./stow_all.sh
 brew services start sketchybar
 brew services start borders
 ```
+
+The script checks all packages for conflicts before linking any files. It stops
+if an existing file or directory would be overwritten. Back up each conflicting
+path shown by Stow, merge any settings you need, then rerun the script. For example,
+if `~/.zprofile` already exists, move it to an unused backup path:
+
+```bash
+mv -i "$HOME/.zprofile" "$HOME/.zprofile.before-dotfiles"
+./stow_all.sh
+```
+
+Do not overwrite an existing backup. Apply the same process to conflicts in
+`~/.zshrc`, `~/.zshrc.local`, `~/.aerospace.toml`, or individual app directories
+under `~/.config`. Re-running the script after a completed install is safe.
+The script can also be called by absolute path from another directory.
+Only `.aerospace.toml` is linked from `aerospace/`; the cheatsheet stays in the
+repo. If an earlier install created `~/cheatsheet.md`, remove it only after
+checking that it is a symlink to this repo.
+
+`.gitconfig` is deliberately excluded. Keep your work Mac's Git identity and
+credential settings separate; configure them locally if needed.
 
 Stow links `.zprofile` and `.zshrc`; `.zshrc` loads the local shell setup.
 Open a new login shell after installation.
@@ -39,7 +79,10 @@ KEEP_ZSHRC=yes RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/o
 ## After Install
 
 - Grant Accessibility permissions to AeroSpace, SketchyBar, and Borders in macOS Settings.
-- Start AeroSpace once; it starts SketchyBar and Borders from `after-startup-command`.
+- Open AeroSpace once and grant its requested permissions. AeroSpace starts at login.
+- Homebrew services start SketchyBar and Borders at login; AeroSpace does not launch them.
+  Check them with `brew services list`. If migrating from the old startup setup,
+  quit any manually started SketchyBar and Borders processes before starting their services.
 - Run `nvim` once so LazyVim can install plugins.
 - Run `zellij` to start the terminal multiplexer.
 
@@ -60,8 +103,9 @@ overrides live in `.config/nvim/lua/plugins/lang.lua`.
 | HTML / CSS | HTML / CSS language servers, Emmet | Prettier |
 | Python | Pyright, Ruff | Ruff |
 
-Mason installs editor tools. Keep Go, Node, the .NET SDK, Terraform, and a
-Rust toolchain with rustfmt and Clippy available in `PATH`. Rust toolchains
+Mason installs editor tools. The Brewfile installs Go, Node, and the .NET SDK.
+Install Terraform and a Rust toolchain separately if you use those languages;
+include rustfmt and Clippy and keep the tools available in `PATH`. Rust toolchains
 are managed by rustup. Project SDK constraints belong in `global.json`,
 `rust-toolchain.toml`, and the equivalent language-specific files.
 
@@ -71,8 +115,8 @@ Install each project's dependencies and ESLint plugins locally. Use
 `:VenvSelect` to choose a Python virtual environment when needed.
 
 Markdown renders inside Neovim (`<leader>um`); browser Markdown Preview and
-Flutter tooling are disabled. Oil opens directory buffers and `-` opens the
-parent directory.
+Flutter tooling are disabled. Oil opens directory buffers. In normal mode,
+`\` or `-` opens the parent directory.
 
 Update plugins with `:Lazy update`, restart Neovim, then run `:TSUpdate` and
 `:checkhealth`. Use `:Mason` for language-server and formatter updates.

@@ -36,7 +36,7 @@ export PATH
 
 if [[ -d "$HOME/.oh-my-zsh" ]]; then
   export ZSH="$HOME/.oh-my-zsh"
-  ZSH_CUSTOM="$HOME/dotfiles/zsh/omz-custom"
+  ZSH_CUSTOM="${${(%):-%x}:A:h}/omz-custom"
   ZSH_THEME="kai"
   zstyle ':omz:update' mode reminder
   plugins=(git)

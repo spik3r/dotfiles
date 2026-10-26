@@ -24,4 +24,5 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 
 cask "aerospace"
+cask "ghostty"
 cask "font-fira-code-nerd-font"
