@@ -95,19 +95,32 @@ overrides live in `.config/nvim/lua/plugins/lang.lua`.
 | Language | Language server | Formatting |
 | --- | --- | --- |
 | Go | gopls | goimports, gofumpt |
+| Java | Eclipse JDTLS through nvim-jdtls | JDTLS |
 | C# / F# | Roslyn / FsAutoComplete | CSharpier / Fantomas |
 | JavaScript, TypeScript, React, SolidJS | vtsls, ESLint | Prettier |
 | Rust | rust-analyzer through rustaceanvim | rustfmt through the LSP |
 | Terraform | terraform-ls | terraform fmt |
+| HCL | — | hclfmt |
 | Markdown | Marksman | Prettier, markdownlint |
 | HTML / CSS | HTML / CSS language servers, Emmet | Prettier |
 | Python | Pyright, Ruff | Ruff |
 
-Mason installs editor tools. The Brewfile installs Go, Node, and the .NET SDK.
+Mason installs editor tools. The Brewfile installs Go, Node, the .NET SDK, and OpenJDK 25.
 Install Terraform and a Rust toolchain separately if you use those languages;
 include rustfmt and Clippy and keep the tools available in `PATH`. Rust toolchains
 are managed by rustup. Project SDK constraints belong in `global.json`,
 `rust-toolchain.toml`, and the equivalent language-specific files.
+
+Java support uses LazyVim's Java extra. Mason installs JDTLS; open a Java file
+inside a Maven, Gradle, or Git project to start it. The shell selects Homebrew's
+OpenJDK 25 when `JAVA_HOME` is unset. Keep an existing `JAVA_HOME` at Java 25 or
+newer for the current Mason JDTLS package; project target versions belong in
+Maven or Gradle configuration.
+Restart the terminal after `brew bundle` so Neovim inherits the Java environment.
+
+C# formatting uses Mason's CSharpier CLI directly, so an older global
+`dotnet-csharpier` tool cannot override it. Generic `.hcl` files use Mason's
+`hclfmt`; Terraform files keep `terraform fmt`.
 
 React and SolidJS use the same TypeScript server. Solid projects should set
 `"jsx": "preserve"` and `"jsxImportSource": "solid-js"` in `tsconfig.json`.
@@ -116,7 +129,8 @@ Install each project's dependencies and ESLint plugins locally. Use
 
 Markdown renders inside Neovim (`<leader>um`); browser Markdown Preview and
 Flutter tooling are disabled. Oil opens directory buffers. In normal mode,
-`\` or `-` opens the parent directory.
+`-` opens the parent directory in Oil. `\` toggles the Snacks side explorer
+at the project root, as does `<leader>e` (`Space`, then `e`).
 
 Update plugins with `:Lazy update`, restart Neovim, then run `:TSUpdate` and
 `:checkhealth`. Use `:Mason` for language-server and formatter updates.

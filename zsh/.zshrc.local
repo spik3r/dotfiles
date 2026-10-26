@@ -21,9 +21,15 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   fi
 fi
 
+# JDTLS needs a JDK even when macOS has no system Java installation.
+if [[ -z "$JAVA_HOME" && -d "$HOMEBREW_PREFIX/opt/openjdk@25/libexec/openjdk.jdk/Contents/Home" ]]; then
+  export JAVA_HOME="$HOMEBREW_PREFIX/opt/openjdk@25/libexec/openjdk.jdk/Contents/Home"
+fi
+
 typeset -U path
 path=(
   "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/dotnet/bin"
+  ${JAVA_HOME:+"$JAVA_HOME/bin"}
   "$HOME/.local/bin"
   "$HOME/.cargo/bin"
   "$HOME/.dotnet/tools"

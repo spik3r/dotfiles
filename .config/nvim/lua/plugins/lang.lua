@@ -31,17 +31,23 @@ return {
   },
   {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "rust-analyzer", "ruff" } },
+    opts = { ensure_installed = { "rust-analyzer", "ruff", "hclfmt" } },
   },
   {
     "stevearc/conform.nvim",
     opts = {
       formatters = {
-        csharpier = { env = { DOTNET_ROOT = dotnet_root } },
+        -- Prefer Mason's CLI over an older global dotnet-csharpier tool.
+        csharpier = {
+          command = "csharpier",
+          args = { "format", "--stdin-path", "$FILENAME" },
+          env = { DOTNET_ROOT = dotnet_root },
+        },
         fantomas = { env = { DOTNET_ROOT = dotnet_root } },
       },
       formatters_by_ft = {
         python = { "ruff_organize_imports", "ruff_format" },
+        hcl = { "hcl" },
       },
     },
   },
