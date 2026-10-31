@@ -1,0 +1,29 @@
+tap "FelixKratz/formulae"
+tap "nikitabobko/tap"
+
+brew "fzf"
+brew "fd"
+brew "dotnet"
+brew "go"
+brew "git-delta"
+brew "jq"
+brew "lsd"
+brew "lua"
+brew "lazygit"
+brew "lua-language-server"
+brew "luarocks"
+brew "neovim"
+brew "node"
+brew "openjdk@25"
+brew "ripgrep"
+brew "felixkratz/formulae/borders", trusted: true
+brew "felixkratz/formulae/sketchybar", trusted: true
+brew "stow"
+brew "zellij"
+brew "zoxide"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+
+cask "nikitabobko/tap/aerospace", trusted: true
+cask "ghostty"
+cask "font-fira-code-nerd-font"
