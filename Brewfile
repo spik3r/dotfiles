@@ -16,14 +16,14 @@ brew "neovim"
 brew "node"
 brew "openjdk@25"
 brew "ripgrep"
-brew "borders"
-brew "sketchybar"
+brew "felixkratz/formulae/borders", trusted: true
+brew "felixkratz/formulae/sketchybar", trusted: true
 brew "stow"
 brew "zellij"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 
-cask "aerospace"
+cask "nikitabobko/tap/aerospace", trusted: true
 cask "ghostty"
 cask "font-fira-code-nerd-font"

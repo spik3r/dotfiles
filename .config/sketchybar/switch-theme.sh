@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 
-THEME_DIR="$HOME/.config/sketchybar/themes"
-CONFIG_DIR="$HOME/.config/sketchybar"
+# Resolve the script's Stow link so folded and existing config directories both
+# update the theme in the repo without replacing Stow's current-theme link.
+script_path="${BASH_SOURCE[0]}"
+while [ -L "$script_path" ]; do
+    script_dir="$(cd -P "$(dirname "$script_path")" && pwd)"
+    script_path="$(readlink "$script_path")"
+    [[ "$script_path" = /* ]] || script_path="$script_dir/$script_path"
+done
+CONFIG_DIR="$(cd -P "$(dirname "$script_path")" && pwd)"
+THEME_DIR="$CONFIG_DIR/themes"
 
 # Available themes
 THEMES=("tokyonight-storm" "san-marino-blue" "catppuccin-mocha")
@@ -29,20 +37,20 @@ get_current_theme() {
 # Function to switch theme
 switch_theme() {
     local theme="$1"
-    
+
     # Check if theme exists
     if [ ! -f "$THEME_DIR/$theme" ]; then
         echo "Error: Theme '$theme' not found!"
         usage
         exit 1
     fi
-    
+
     # Create/update symlink to current theme
-    ln -sf "$THEME_DIR/$theme" "$CONFIG_DIR/current-theme"
+    ln -sfn "themes/$theme" "$CONFIG_DIR/current-theme"
 
     echo "Switched to theme: $theme"
     echo "Reloading sketchybar..."
-    
+
     # Reload sketchybar
     sketchybar --reload
 }

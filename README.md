@@ -16,7 +16,7 @@ Install Homebrew if it is not already installed:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Load Homebrew, clone the `cleanup` branch, and install the apps and CLI tools.
+Load Homebrew, clone the `main` branch, and install the apps and CLI tools.
 You can keep the checkout anywhere; leave it in place after linking the configs.
 
 ```bash
@@ -25,13 +25,16 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
 else
   eval "$(/usr/local/bin/brew shellenv)"
 fi
-git clone --branch cleanup https://github.com/spik3r/dotfiles.git "$HOME/dotfiles"
+git clone --branch main https://github.com/spik3r/dotfiles.git "$HOME/dotfiles"
 cd "$HOME/dotfiles"
 brew bundle
 ./stow_all.sh
 brew services start sketchybar
 brew services start borders
 ```
+
+The Brewfile grants package-level trust only to Borders, SketchyBar, and
+AeroSpace from their third-party taps.
 
 The script checks all packages for conflicts before linking any files. It stops
 if an existing file or directory would be overwritten. Back up each conflicting
@@ -54,7 +57,9 @@ checking that it is a symlink to this repo.
 `.gitconfig` is deliberately excluded. Keep your work Mac's Git identity and
 credential settings separate; configure them locally if needed.
 
-Stow links `.zprofile` and `.zshrc`; `.zshrc` loads the local shell setup.
+Stow links `.zprofile`, `.zshrc`, `.zshrc.local`, and `~/omz-custom`.
+The custom `kai` theme is included at `~/omz-custom/themes/kai.zsh-theme`.
+`.zshrc` loads the local shell setup.
 Open a new login shell after installation.
 
 Optional Oh My Zsh install:
@@ -63,7 +68,8 @@ Optional Oh My Zsh install:
 KEEP_ZSHRC=yes RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-`~/.zshrc.local` will load Oh My Zsh if it exists, then load the fzf, zoxide, autosuggestions, and syntax highlighting setup.
+`~/.zshrc.local` loads Oh My Zsh with the included `kai` theme if Oh My Zsh
+is installed, then loads fzf, zoxide, autosuggestions, and syntax highlighting.
 
 ## Included
 
@@ -75,6 +81,7 @@ KEEP_ZSHRC=yes RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/o
 - SketchyBar: `~/.config/sketchybar`
 - Zellij: `~/.config/zellij/config.kdl`
 - Zsh local setup: `~/.zshrc.local`
+- Oh My Zsh custom theme: `~/omz-custom/themes/kai.zsh-theme`
 
 ## After Install
 
@@ -85,6 +92,44 @@ KEEP_ZSHRC=yes RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/o
   quit any manually started SketchyBar and Borders processes before starting their services.
 - Run `nvim` once so LazyVim can install plugins.
 - Run `zellij` to start the terminal multiplexer.
+- Install Obsidian separately if you use the `Alt-Shift-o` app shortcut. It is optional.
+
+AeroSpace uses `Alt-h/j/k/l` to focus windows and `Alt-Shift-h/j/k/l` to move
+them. These global bindings take precedence over terminal applications. Neovim
+provides `Space m j` / `Space m k` to move lines or visual selections down / up;
+Zellij uses the `Ctrl-b` prefix below for pane navigation.
+
+## Zellij
+
+Zellij uses a `Ctrl-b` prefix. It starts in Normal mode with the inherited
+keybindings cleared, so `Ctrl-h`, `Ctrl-s`, `Ctrl-o`, `Ctrl-n`, `Ctrl-p`, and
+`Ctrl-q` reach the application. Tmux mode is active only after the prefix.
+
+Press `Ctrl-b`, release it, then press:
+
+| Key | Action |
+| --- | --- |
+| `"` / `%` | Split below / right |
+| `h/j/k/l` or arrows | Focus a pane |
+| `H/J/K/L` | Grow a pane in that direction |
+| `o` | Switch to the previous pane |
+| `c` | Create a tab |
+| `n` / `p` / `1`–`9` | Next / previous / numbered tab |
+| `,` | Rename the tab; `Enter` saves, `Esc` cancels |
+| `z` | Toggle pane fullscreen |
+| `Space` | Cycle pane layouts |
+| `[` | Enter scrollback; `j/k` scroll, `/` searches, `q` or `Esc` exits |
+| `s` | Open the session manager |
+| `x` | Close the pane and its running process |
+| `d` | Detach and leave the session running |
+| `Ctrl-b` | Send a literal `Ctrl-b` to the application |
+| `Esc` | Cancel the prefix |
+
+Most commands return to Normal mode. In scrollback search, use `n` / `N` for
+next / previous matches. Zellij reserves no unprefixed Alt shortcuts; AeroSpace
+still handles its global Alt bindings before keys reach the terminal.
+Start a new Zellij session to verify the new defaults; an existing session may
+keep its current input mode when the config reloads.
 
 ## Neovim
 

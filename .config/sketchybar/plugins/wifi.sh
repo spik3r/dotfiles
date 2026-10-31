@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
 
-source "$HOME/.config/sketchybar/current-theme"
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+source "$CONFIG_DIR/current-theme"
 
-# Get WiFi status
-WIFI_STATUS=$(networksetup -getairportpower en0 | awk '{print $4}')
-WIFI_SSID=$(networksetup -getairportnetwork en0 | cut -d' ' -f4-)
+WIFI_DEVICE=$(networksetup -listallhardwareports | awk '
+    /^Hardware Port: (Wi-Fi|AirPort)$/ { wifi = 1; next }
+    wifi && /^Device:/ { print $2; exit }
+')
 
-if [ "$WIFI_STATUS" = "On" ]; then
-    if [ "$WIFI_SSID" != "You are not associated with an AirPort network." ]; then
-        # Connected to WiFi
-        sketchybar --set "$NAME" \
-                   icon=󰖩 \
-                   icon.color="$ICON_COLOR"
-    else
-        # WiFi on but not connected
-        sketchybar --set "$NAME" \
-                   icon=󰖪 \
-                   icon.color="$YELLOW"
+ICON=󰖭
+COLOR="$RED"
+if [ -n "$WIFI_DEVICE" ]; then
+    WIFI_POWER=$(networksetup -getairportpower "$WIFI_DEVICE" 2>/dev/null)
+    if [[ "$WIFI_POWER" = *": On" ]]; then
+        # Link status works even when macOS privacy settings hide the SSID.
+        if ifconfig "$WIFI_DEVICE" 2>/dev/null | grep -q 'status: active'; then
+            ICON=󰖩
+            COLOR="$ICON_COLOR"
+        else
+            ICON=󰖪
+            COLOR="$YELLOW"
+        fi
     fi
-else
-    # WiFi off
-    sketchybar --set "$NAME" \
-               icon=󰖭 \
-               icon.color="$RED"
 fi
+
+sketchybar --set "$NAME" icon="$ICON" icon.color="$COLOR"
