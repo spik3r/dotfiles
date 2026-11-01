@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Tokyo Night Storm Theme - Colors Only
+# Load base defaults first
+source "$CONFIG_DIR/defaults"
+
+# Theme Colors
+export THEME_NAME="Tokyo Night Storm"
+
+# Core Palette
+export BLACK="0xff24283b"
+export WHITE="0xffc0caf5"
+export RED="0xfff7768e"
+export GREEN="0xff9ece6a"
+export BLUE="0xff7aa2f7"
+export YELLOW="0xffe0af68"
+export ORANGE="0xffff9e64"
+export MAGENTA="0xffbb9af7"
+export CYAN="0xff7dcfff"
+export TRANSPARENT="0x00000000"
+
+# Background Colors
+export BG_PRIMARY="0xff1f2335"
+export BG_SECONDARY="0xff24283b"
+export BG_TERTIARY="0xff414868"
+
+# Applied Colors (using defaults for structure)
+export BAR_COLOR="0x${BAR_OPACITY}1f2335"
+export BAR_BORDER_COLOR="$BG_TERTIARY"
+
+export ITEM_BG_COLOR="0x${ITEM_OPACITY}1f2335"
+export ITEM_BG_COLOR_HIGHLIGHT="0xff1f2347"
+export ITEM_BORDER_COLOR="$BG_TERTIARY"
+export SECTION_BORDER_COLOR="0xff565f89"
+
+export TEXT_COLOR="$WHITE"
+export TEXT_HIGHLIGHT_COLOR="$BLUE"
+export ICON_COLOR="$CYAN"
+export ICON_HIGHLIGHT_COLOR="$MAGENTA"
