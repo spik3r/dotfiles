@@ -36,19 +36,19 @@ brew services start borders
 The Brewfile grants package-level trust only to Borders, SketchyBar, and
 AeroSpace from their third-party taps.
 
-The script checks all packages for conflicts before linking any files. It stops
-if an existing file or directory would be overwritten. Back up each conflicting
-path shown by Stow, merge any settings you need, then rerun the script. For example,
-if `~/.zprofile` already exists, move it to an unused backup path:
+The script checks for app-config and other Zsh conflicts before making backups.
+Existing `~/.zshrc` and `~/.zprofile` files or links from another setup are moved
+to a private, timestamped directory under `~/.local/state/dotfiles/backups/`.
+It prints each backup path. Links already pointing to this checkout are kept;
+re-running the installer does not create another backup of them.
 
-```bash
-mv -i "$HOME/.zprofile" "$HOME/.zprofile.before-dotfiles"
-./stow_all.sh
-```
+To restore a backup, remove the corresponding Stow link and move the backed-up
+file to its original path. Merge any settings you need into the new setup first.
+Existing `~/omz-custom`, `~/.aerospace.toml`, or app configs
+under `~/.config` still cause the installer to stop with a conflict. Back up and
+merge those paths yourself, then rerun the script. Directories at `~/.zshrc` or
+`~/.zprofile` also require manual resolution.
 
-Do not overwrite an existing backup. Apply the same process to conflicts in
-`~/.zshrc`, `~/.zshrc.local`, `~/.aerospace.toml`, or individual app directories
-under `~/.config`. Re-running the script after a completed install is safe.
 The script can also be called by absolute path from another directory.
 Only `.aerospace.toml` is linked from `aerospace/`; the cheatsheet stays in the
 repo. If an earlier install created `~/cheatsheet.md`, remove it only after
@@ -57,10 +57,15 @@ checking that it is a symlink to this repo.
 `.gitconfig` is deliberately excluded. Keep your work Mac's Git identity and
 credential settings separate; configure them locally if needed.
 
-Stow links `.zprofile`, `.zshrc`, `.zshrc.local`, and `~/omz-custom`.
+Stow links `.zprofile`, `.zshrc`, and `~/omz-custom`.
 The custom `kai` theme is included at `~/omz-custom/themes/kai.zsh-theme`.
-`.zshrc` loads the local shell setup.
+`.zshrc` contains the interactive shell setup.
 Open a new login shell after installation.
+
+When upgrading from the split config, the installer removes an old
+`~/.zshrc.local` symlink only if it points to this checkout. It leaves regular
+files and links to other locations untouched, but no longer loads them. Move
+machine-specific exports from those files into `~/.zshenv`.
 
 Optional Oh My Zsh install:
 
@@ -68,8 +73,35 @@ Optional Oh My Zsh install:
 KEEP_ZSHRC=yes RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-`~/.zshrc.local` loads Oh My Zsh with the included `kai` theme if Oh My Zsh
+`~/.zshrc` loads Oh My Zsh with the included `kai` theme if Oh My Zsh
 is installed, then loads fzf, zoxide, autosuggestions, and syntax highlighting.
+
+## Shell startup and local environment
+
+The installer creates `~/.zshenv` with owner-only read/write permissions when
+it is missing. It never replaces an existing file or symlink, and does not link
+this file into the repo. Keep machine-specific exports there, for example:
+
+```zsh
+export EDITOR="vim"
+export VISUAL="vim"
+export PROJECTS_DIR="$HOME/code"
+```
+
+Zsh automatically reads `~/.zshenv` before `.zprofile` and `.zshrc`; sourcing it
+again from `.zshrc` would execute it twice. It also runs for non-interactive Zsh
+scripts, so keep it quiet and avoid aliases, prompts, or commands that need a TTY.
+The editor and locale defaults in `.zshrc` preserve values already set by
+`.zshenv` or the parent environment.
+
+- `.zprofile` runs for login shells. It finds Homebrew in `/opt/homebrew` on Apple
+  Silicon or `/usr/local` on Intel and loads its PATH and environment settings.
+  Keep this step for a new Mac: finding Homebrew's directory alone does not add
+  its executables to PATH. Interactive non-login shells inherit that environment
+  from their parent login shell, including Zellij panes. Launch Zellij from that
+  initialized terminal; `.zshrc` does not detect or initialize Homebrew again.
+- `.zshrc` runs for interactive shells. It defaults `XDG_CONFIG_HOME` to
+  `~/.config` only when unset and contains the aliases, theme, history, and tool setup.
 
 ## Included
 
@@ -80,7 +112,7 @@ is installed, then loads fzf, zoxide, autosuggestions, and syntax highlighting.
 - LazyVim: `~/.config/nvim`
 - SketchyBar: `~/.config/sketchybar`
 - Zellij: `~/.config/zellij/config.kdl`
-- Zsh local setup: `~/.zshrc.local`
+- Zsh interactive setup: `~/.zshrc`
 - Oh My Zsh custom theme: `~/omz-custom/themes/kai.zsh-theme`
 
 ## After Install

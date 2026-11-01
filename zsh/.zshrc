@@ -1,7 +1,71 @@
 # Interactive shell configuration.
+# Zsh has already loaded ~/.zshenv; do not source it a second time here.
 
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-if [[ -r "$HOME/.zshrc.local" ]]; then
-  source "$HOME/.zshrc.local"
+export VISUAL="${VISUAL:-nvim}"
+export EDITOR="${EDITOR:-nvim}"
+export LANG="${LANG:-en_AU.UTF-8}"
+
+alias ls="lsd"
+alias l="ls -l"
+alias la="ls -a"
+alias lla="ls -la"
+alias lt="ls --tree"
+alias python="python3"
+alias v="nvim"
+alias zj="zellij"
+
+# JDTLS needs a JDK even when macOS has no system Java installation.
+if [[ -z "$JAVA_HOME" && -d "$HOMEBREW_PREFIX/opt/openjdk@25/libexec/openjdk.jdk/Contents/Home" ]]; then
+  export JAVA_HOME="$HOMEBREW_PREFIX/opt/openjdk@25/libexec/openjdk.jdk/Contents/Home"
+fi
+
+typeset -U path
+path=(
+  ${HOMEBREW_PREFIX:+"$HOMEBREW_PREFIX/opt/dotnet/bin"}
+  ${JAVA_HOME:+"$JAVA_HOME/bin"}
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  "$HOME/.dotnet/tools"
+  "$HOME/go/bin"
+  "$HOME/.bun/bin"
+  $path
+  /usr/local/bin
+)
+export PATH
+
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+  export ZSH="$HOME/.oh-my-zsh"
+  ZSH_CUSTOM="${${(%):-%x}:A:h}/omz-custom"
+  ZSH_THEME="kai"
+  zstyle ':omz:update' mode reminder
+  plugins=(git)
+  source "$ZSH/oh-my-zsh.sh"
+fi
+
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt hist_ignore_all_dups hist_ignore_space hist_find_no_dups
+
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+if [[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
+if [[ -s "$HOME/.bun/_bun" ]]; then
+  source "$HOME/.bun/_bun"
+fi
+
+# Load after completion and key bindings so their widgets are highlighted.
+if [[ -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+  source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
