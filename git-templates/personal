@@ -1,0 +1,7 @@
+# Local file: fill in both fields before committing. Use your personal identity.
+[user]
+    name =
+    email =
+    useConfigOnly = true
+[core]
+    sshCommand = ssh -i ~/.ssh/id_ed25519_personal -o IdentitiesOnly=yes
