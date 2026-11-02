@@ -105,52 +105,61 @@ The editor and locale defaults in `.zshrc` preserve values already set by
 
 ## Git identities and SSH keys
 
-Run this once from the checkout to enable automatic profiles:
+Run this from the checkout to enable the profiles, or to update an older setup:
 
 ```bash
 ./setup_git.sh
 ```
 
-This Stows `git/.config/git/dotfiles.inc` to `~/.config/git/dotfiles.inc` and adds
-one include to your global Git config. It backs up an existing global config
-under `~/.local/state/dotfiles/backups/` before changing it. Other settings and
-credential helpers stay in place. Re-running it preserves your profile files
-and does not add duplicate includes. The main `stow_all.sh` does not enable this
-optional setup.
-If an older install linked the global config into a checkout, the script
-replaces that link with a private local copy before adding the include.
+The installer Stows `git/.config/git/dotfiles.inc` to
+`~/.config/git/dotfiles.inc` and adds one include to your global Git config.
+It backs up an existing global config under `~/.local/state/dotfiles/backups/`
+before adding that include. Other settings and credential helpers stay in place.
+If an older install linked the global config into a checkout, the script replaces
+that link with a private local copy before adding the include. The main
+`stow_all.sh` does not enable this optional setup.
 
-The script creates these private local files with empty name and email fields.
-Edit each profile you use; the empty fields prevent commits with an unconfigured
-profile. Existing readable files or links to files are preserved; broken links
-and directories stop setup for you to resolve. These files and SSH keys are
-never linked into the repo. Files from the earlier three-profile setup are
-left untouched but are no longer included.
+Only the repository directory selects the profile. There are no GitHub or GitLab
+host rules:
 
-| Local file | Used for | SSH key |
+| Local identity file | Used for | SSH key |
 | --- | --- | --- |
-| `~/.gitconfig-personal` | GitHub by default; `~/code/personal/` | `~/.ssh/id_ed25519_personal` |
-| `~/.gitconfig-work` | GitLab.com by default; everything under `~/code/work/` | `~/.ssh/id_ed25519_work` |
+| `~/.gitconfig-personal` | `~/code/personal/` and its subdirectories | `~/.ssh/id_ed25519_personal` |
+| `~/.gitconfig-work` | Everywhere else, including GitHub and GitLab | `~/.ssh/id_ed25519` |
 
-Set the name and verified email in each local file, for example:
+The installer creates missing profile files with owner-only permissions and
+empty name and email fields. Fill these in once using emails verified by the
+corresponding accounts:
 
-```gitconfig
-[user]
-    name = Your Name
-    email = your-verified-email@example.com
-    useConfigOnly = true
+```bash
+git config --file ~/.gitconfig-personal user.name "YOUR NAME"
+git config --file ~/.gitconfig-personal user.email "PERSONAL_EMAIL"
+git config --file ~/.gitconfig-work user.name "YOUR NAME"
+git config --file ~/.gitconfig-work user.email "WORK_EMAIL"
 ```
 
-Keep the included `[core] sshCommand` line: it selects that profile's SSH key.
-Commit identity and login credentials are separate; an email alone does not
-select a GitHub account.
+Empty profiles block commits until configured. Existing readable files or links
+to files are preserved; broken links and directories stop setup for you to resolve.
+Local identity files and SSH keys stay outside the repository.
 
-### Work and personal GitHub accounts
+When upgrading, the shared config loads your existing work identity and then
+sets `id_ed25519` as the default key. This overrides the old work profile's
+`id_ed25519_work` command without editing that file. The personal template
+continues to use `id_ed25519_personal`. If you previously customized its SSH
+command, set it back once:
 
-Keep both GitHub and GitLab work checkouts under `~/code/work/`. They share
-the work identity and SSH key. Keep personal checkouts under `~/code/personal/`.
-The directory rule overrides host defaults, so both accounts use normal GitHub
-SSH URLs:
+```bash
+git config --file ~/.gitconfig-personal core.sshCommand \
+  'ssh -i ~/.ssh/id_ed25519_personal -o IdentitiesOnly=yes'
+```
+
+Re-running the installer preserves identities and does not duplicate its global
+include. Old profile files from the earlier host-based setup remain untouched
+but are no longer included, except for the personal and work files above.
+
+### Clone with the right account
+
+Use normal SSH URLs; both GitHub accounts work without SSH host aliases:
 
 ```bash
 mkdir -p ~/code/personal ~/code/work
@@ -160,52 +169,58 @@ git clone git@gitlab.com:WORK_GROUP/PROJECT.git ~/code/work/GITLAB_PROJECT
 ```
 
 Replace the capitalized names. Clone dotfiles only if you do not already have a
-checkout. An existing dotfiles checkout can stay anywhere: its GitHub remote
-selects the personal profile unless it is inside `~/code/work/`.
-Directory rules also apply to new repositories before they have a remote.
-After the initial setup, cloning into the right directory selects the commit
-identity and SSH key automatically, including during the clone itself.
+checkout. The directory rule applies during cloning and to new repositories
+before they have a remote. It works with any hostname, including self-hosted
+GitLab. Repositories under `~/code/personal/` always select the personal profile,
+even for a GitLab remote. All other locations select the default profile, even
+for GitHub. Keep the checkout in place after Stow creates its links.
 
-The host rules cover `git@github.com:…`, `ssh://git@github.com/…`, and HTTPS
-URLs, with equivalent rules for GitLab.com. HTTPS selects the commit identity
-but uses your credential helper rather than an SSH key. Use SSH URLs for the
-two GitHub accounts in this setup. For an existing checkout, switch its URL once:
+To bootstrap before the installer is available, clone over HTTPS or select the
+personal key for that command:
+
+```bash
+git -c core.sshCommand="ssh -i ~/.ssh/id_ed25519_personal -o IdentitiesOnly=yes" \
+  clone git@github.com:spik3r/dotfiles.git ~/code/personal/dotfiles
+```
+
+HTTPS uses a credential helper rather than an SSH key. Switch an existing
+checkout to SSH once if needed:
 
 ```bash
 git remote set-url origin git@github.com:OWNER/REPOSITORY.git
 ```
 
-For self-hosted GitLab, keep its checkouts under `~/code/work/`; the directory
-rule works with any hostname. Use its actual hostname in the SSH test below.
-For other directory layouts, add `includeIf "gitdir:~/your/work/path/"` rules to
-your global config after the dotfiles include, pointing at the matching local
-profile. A trailing slash includes nested repositories. Repositories outside
-these directories with remotes on both hosts match both host defaults; put them
-in the appropriate profile directory to resolve that ambiguity.
-Existing repository-local settings override these global profiles. Linked Git
-worktrees follow their Git directory, which can be in the original checkout;
-do not use a worktree's location to switch accounts.
+Commit identity and login credentials are separate; an email alone does not
+select an account. Repository-local settings and command-line overrides take
+precedence over the global profiles. Linked Git worktrees follow their Git
+directory, which can be in the original checkout; do not use a linked worktree's
+location to switch accounts.
 
 ### Create and register SSH keys
 
-Check for existing keys first. Reuse the appropriate key or update the local
-profile's `sshCommand` to its filename. If creating keys, run only the commands
-for accounts you use, choose passphrases, and decline any overwrite prompt:
+Check for existing keys first. Reuse `~/.ssh/id_ed25519` for your default/work
+account and `~/.ssh/id_ed25519_personal` for your personal account if they already
+exist. Otherwise, run only the missing key commands, choose passphrases, and
+decline any overwrite prompt:
 
 ```bash
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 ssh-keygen -t ed25519 -C "personal" -f ~/.ssh/id_ed25519_personal
-ssh-keygen -t ed25519 -C "work" -f ~/.ssh/id_ed25519_work
+ssh-keygen -t ed25519 -C "work" -f ~/.ssh/id_ed25519
 ```
 
-Copy each **public** key and add it to its matching account's SSH keys settings:
+Copy the personal **public** key and add it to your personal GitHub account:
 
 ```bash
 pbcopy < ~/.ssh/id_ed25519_personal.pub
-# Add this key to your personal GitHub account, then copy the next key.
-pbcopy < ~/.ssh/id_ed25519_work.pub
-# Add this work key to both your work GitHub and GitLab accounts.
+```
+
+Then copy the default public key and add it to your work GitHub and GitLab
+accounts:
+
+```bash
+pbcopy < ~/.ssh/id_ed25519.pub
 ```
 
 Never upload the files without `.pub`. If your work organization requires SSO,
@@ -215,12 +230,13 @@ On macOS, store each key's passphrase in Keychain:
 
 ```bash
 /usr/bin/ssh-add --apple-use-keychain ~/.ssh/id_ed25519_personal
-/usr/bin/ssh-add --apple-use-keychain ~/.ssh/id_ed25519_work
+/usr/bin/ssh-add --apple-use-keychain ~/.ssh/id_ed25519
 ```
 
 Merge this into `~/.ssh/config` without replacing existing settings. Put it before
-broader `Host *` rules that set these options. It loads keys on demand after login;
-the Git profile still chooses the key for each repository.
+broader `Host *` rules that set these options. Add your actual hostname if GitLab
+is self-hosted. It loads keys on demand after login; Git selects each key by
+repository directory.
 
 ```sshconfig
 Host github.com gitlab.com
@@ -228,17 +244,17 @@ Host github.com gitlab.com
     UseKeychain yes
 ```
 
-Test each account (GitHub reports successful authentication but exits with status
-1 because it provides no shell). Check the greeting names the expected account,
+Test each account. GitHub reports successful authentication but exits with status
+1 because it provides no shell. Check the greeting names the expected account,
 and verify the host fingerprint against the provider's docs before accepting it:
 
 ```bash
 ssh -T -i ~/.ssh/id_ed25519_personal -o IdentitiesOnly=yes git@github.com
-ssh -T -i ~/.ssh/id_ed25519_work -o IdentitiesOnly=yes git@github.com
-ssh -T -i ~/.ssh/id_ed25519_work -o IdentitiesOnly=yes git@gitlab.com
+ssh -T -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes git@github.com
+ssh -T -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes git@gitlab.com
 ```
 
-Inside a personal and a work checkout, check the selected settings:
+Inside personal and other checkouts, check the selected settings:
 
 ```bash
 git config --show-origin --get user.email

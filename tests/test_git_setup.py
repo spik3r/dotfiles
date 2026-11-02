@@ -102,8 +102,8 @@ class GitSetupTest(unittest.TestCase):
         self.install()
         self.fill_profiles()
         cases = [
-            ("anywhere/dotfiles", "git@github.com:example/dotfiles.git", "personal"),
-            ("elsewhere/https", "https://github.com/example/project.git", "personal"),
+            ("anywhere/dotfiles", "git@github.com:example/dotfiles.git", "work"),
+            ("elsewhere/https", "https://github.com/example/project.git", "work"),
             ("elsewhere/ssh", "ssh://git@gitlab.com/example/project.git", "work"),
             ("elsewhere/lab", "git@gitlab.com:example/project.git", "work"),
             ("code/work/nested/project", "git@github.com:example/work.git", "work"),
@@ -112,11 +112,16 @@ class GitSetupTest(unittest.TestCase):
             ("code/personal/lab", "git@gitlab.com:example/project.git", "personal"),
             ("code/work/lab", "git@gitlab.com:example/project.git", "work"),
             ("code/work/private", "git@internal.example.invalid:team/repo.git", "work"),
+            ("elsewhere/new", None, "work"),
+            ("code/personal/nested/project", "git@github.com:example/project.git", "personal"),
+            ("code/personal-other/project", "git@github.com:example/project.git", "work"),
         ]
         for directory, remote, profile in cases:
             path = self.init(directory, remote)
             self.assertEqual(self.value(path, "user.name"), profile)
-            self.assertIn(f"id_ed25519_{profile}", self.value(path, "core.sshCommand"))
+            key = "id_ed25519_personal" if profile == "personal" else "id_ed25519"
+            self.assertEqual(self.value(path, "core.sshCommand"),
+                             f"ssh -i ~/.ssh/{key} -o IdentitiesOnly=yes")
         self.run_cmd("git", "config", "user.email", "override@example.invalid", cwd=path)
         self.assertEqual(self.value(path, "user.email"), "override@example.invalid")
 
@@ -126,6 +131,20 @@ class GitSetupTest(unittest.TestCase):
         self.assertFalse((self.home / ".gitconfig").exists())
         self.assertFalse((self.home / ".gitconfig-personal").exists())
         self.assertFalse((self.home / ".config/git/dotfiles.inc").exists())
+
+    def test_upgrade_overrides_old_work_key_without_editing_identity(self):
+        work = self.home / ".gitconfig-work"
+        original = ('[user]\n    name = Existing Work\n    email = work@example.invalid\n'
+                    '[core]\n    sshCommand = ssh -i ~/.ssh/id_ed25519_work -o IdentitiesOnly=yes\n')
+        work.write_text(original)
+        self.install()
+        path = self.init("outside/project", "git@github.com:example/project.git")
+        self.assertEqual(self.value(path, "user.email"), "work@example.invalid")
+        self.assertEqual(self.value(path, "core.sshCommand"),
+                         "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes")
+        self.assertEqual(work.read_text(), original)
+        self.install()
+        self.assertEqual(work.read_text(), original)
 
     def test_blank_profile_rejects_commit_even_with_global_identity(self):
         self.run_cmd("git", "config", "--global", "user.name", "Old Default")
@@ -146,15 +165,17 @@ class GitSetupTest(unittest.TestCase):
         ssh.write_text('#!/bin/sh\nprintf "%s\\n" "$@" >> "$HOME/ssh-args"\nexit 1\n')
         ssh.chmod(0o700)
         self.env["PATH"] = f"{bin_dir}:{self.env['PATH']}"
-        for directory, key, host in (("code/work/project", "work", "github.com"),
-                                     ("elsewhere/personal", "personal", "github.com"),
-                                     ("code/work/lab", "work", "gitlab.com")):
+        for directory, key, host in (("code/work/project", "id_ed25519", "github.com"),
+                                     ("elsewhere/project", "id_ed25519", "github.com"),
+                                     ("code/personal/project", "id_ed25519_personal", "github.com"),
+                                     ("code/personal/lab", "id_ed25519_personal", "gitlab.com"),
+                                     ("code/work/lab", "id_ed25519", "gitlab.com")):
             log = self.home / "ssh-args"
             log.unlink(missing_ok=True)
             result = self.run_cmd("git", "clone", f"git@{host}:example/project.git",
                                   str(self.home / directory), check=False)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn(f"id_ed25519_{key}", log.read_text())
+            self.assertIn(str(self.home / ".ssh" / key), log.read_text().splitlines())
 
 
 if __name__ == "__main__":

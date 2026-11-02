@@ -1,7 +1,7 @@
-# Local file: fill in both fields before committing. Use your work identity for GitHub and GitLab.
+# Local file: default identity outside ~/code/personal/. Fill in both fields.
 [user]
     name =
     email =
     useConfigOnly = true
 [core]
-    sshCommand = ssh -i ~/.ssh/id_ed25519_work -o IdentitiesOnly=yes
+    sshCommand = ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes

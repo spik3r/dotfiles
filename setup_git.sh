@@ -59,3 +59,4 @@ if [[ "$installed" == false ]]; then
   git config --global --add include.path "$include"
 fi
 echo "Git profiles linked. See README.md for identities, SSH keys, and checks."
+echo "SSH uses ~/.ssh/id_ed25519 by default and ~/.ssh/id_ed25519_personal under ~/code/personal/."
