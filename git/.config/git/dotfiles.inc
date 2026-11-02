@@ -1,19 +1,11 @@
-# Host defaults apply wherever the repository is cloned.
-[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
-    path = ~/.gitconfig-personal
-[includeIf "hasconfig:remote.*.url:https://github.com/**"]
-    path = ~/.gitconfig-personal
-[includeIf "hasconfig:remote.*.url:ssh://git@github.com/**"]
-    path = ~/.gitconfig-personal
-[includeIf "hasconfig:remote.*.url:git@gitlab.com:*/**"]
-    path = ~/.gitconfig-work
-[includeIf "hasconfig:remote.*.url:https://gitlab.com/**"]
-    path = ~/.gitconfig-work
-[includeIf "hasconfig:remote.*.url:ssh://git@gitlab.com/**"]
+# Load the local default identity without keeping it in the checkout.
+[include]
     path = ~/.gitconfig-work
 
-# Directory rules come last so they override host defaults, even before a remote exists.
+# Override the previous work profile's key without changing its local settings.
+[core]
+    sshCommand = ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes
+
+# This also applies during cloning, before the destination checkout exists.
 [includeIf "gitdir:~/code/personal/"]
     path = ~/.gitconfig-personal
-[includeIf "gitdir:~/code/work/"]
-    path = ~/.gitconfig-work
