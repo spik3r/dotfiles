@@ -27,3 +27,4 @@ brew "zsh-syntax-highlighting"
 cask "nikitabobko/tap/aerospace", trusted: true
 cask "ghostty"
 cask "font-fira-code-nerd-font"
+cask "raycast"

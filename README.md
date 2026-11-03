@@ -293,6 +293,68 @@ and [GitLab SSH setup](https://docs.gitlab.com/user/ssh/).
 - Run `zellij` to start the terminal multiplexer.
 - Install Obsidian separately if you use the `Alt-Shift-o` app shortcut. It is optional.
 
+## Raycast and Hyper key
+
+Raycast is included in the Brewfile. On an existing installation, run:
+
+```bash
+brew bundle
+open -a Raycast
+```
+
+In Raycast, enable launch at login and grant its requested macOS permissions.
+Open **Settings → Keyboard → Hyper Key** (search Settings for Hyper Key if your
+version uses a different menu). Select **Caps Lock** and enable **Include Shift**.
+This config uses Hyper as **Control + Option + Command + Shift**; leaving Shift
+off will not match the AeroSpace bindings. Optionally set Quick Press to Escape.
+Keep Raycast running for the remapping to work, and disable other tools that
+remap Caps Lock. These settings are configured in Raycast, not by Stow.
+
+Do not assign Raycast hotkeys to the Hyper combinations reserved for AeroSpace
+in the table below. If Hyper stops working, check Raycast's Hyper Key diagnostic
+and whether an app has enabled Secure Input. Its compatibility option only
+supports Raycast's own shortcuts while Secure Input is active, so AeroSpace
+shortcuts can still be blocked. See the [Raycast Hyper Key manual](https://manual.raycast.com/hyper-key).
+
+## AeroSpace setup and shortcuts
+
+`./stow_all.sh` links `aerospace/.aerospace.toml` to `~/.aerospace.toml`.
+Open AeroSpace and grant Accessibility access when prompted. It starts at login;
+SketchyBar and Borders run through the Homebrew services started during install.
+Raycast supplies the Hyper key; AeroSpace handles the window commands directly.
+No Raycast extension is needed for these bindings.
+
+After editing the linked config, reload it:
+
+```bash
+aerospace reload-config
+```
+
+| Shortcut | Action |
+| --- | --- |
+| `Alt-h/j/k/l` | Focus left/down/up/right |
+| `Alt-Shift-h/j/k/l` | Move the window left/down/up/right |
+| `Alt-1/2/3/9` | Switch to that workspace |
+| `Alt-a/b/c/d/m/o/r/s/t/v` | Switch to the corresponding letter workspace |
+| `Hyper-1/2/3/9` or `Hyper-a/b/c/d/m/o/r/s/t/v` | Move the window to that workspace and follow it |
+| `Hyper-f` | Toggle floating/tiling |
+| `Hyper-Tab` | Toggle tiles/accordion |
+| `Hyper-l` | Toggle horizontal/vertical layout |
+| `Hyper-n` | Switch to the previous workspace |
+| `Hyper-q` | Enter service mode; `Esc` reloads and exits, `r` flattens and exits |
+| `Hyper-x` | Reload AeroSpace and SketchyBar |
+
+Try `Caps Lock + t`: it moves the focused window to workspace T and follows it.
+Ghostty windows also open on T automatically; Safari uses S and Obsidian uses O.
+`Alt-Enter` opens Apple's Terminal app. See the [full cheatsheet](aerospace/cheatsheet.md)
+for the remaining resize, layout, and monitor commands.
+
+Check monitor names with `aerospace list-monitors`. The config assigns workspace
+9 to `Built-in Retina Display` and uses monitor-specific top gaps: 44 for
+`built-in.*`, 76 for `LG.*`, and 76 as the fallback. Adjust those values and the
+workspace assignment for your displays, then reload. Review the macOS settings
+below too. See the [AeroSpace configuration guide](https://nikitabobko.github.io/AeroSpace/guide#configuring-aerospace).
+
 AeroSpace uses `Alt-h/j/k/l` to focus windows and `Alt-Shift-h/j/k/l` to move
 them. These global bindings take precedence over terminal applications. Neovim
 provides `Space m j` / `Space m k` to move lines or visual selections down / up;
