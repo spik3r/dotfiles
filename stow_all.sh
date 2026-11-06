@@ -15,7 +15,8 @@ mkdir -p "$HOME/.config"
 if ! {
   stow --simulate --ignore='^\.(zshrc|zprofile)$' -t "$HOME" zsh &&
   stow --simulate -t "$HOME/.config" .config &&
-  stow --simulate --ignore='^cheatsheet\.md$' -t "$HOME" aerospace
+  stow --simulate --ignore='^cheatsheet\.md$' -t "$HOME" aerospace &&
+  stow --simulate -t "$HOME" hammerspoon
 }; then
   echo "Resolve the conflicts above, then rerun this script. See README.md for backup steps." >&2
   exit 1
@@ -68,6 +69,9 @@ stow -t "$HOME/.config" .config
 
 echo "Stowing AeroSpace..."
 stow --ignore='^cheatsheet\.md$' -t "$HOME" aerospace
+
+echo "Stowing Hammerspoon..."
+stow -t "$HOME" hammerspoon
 
 # Remove only the obsolete link owned by this checkout, including dangling links.
 legacy_rc="$HOME/.zshrc.local"
