@@ -29,11 +29,3 @@ clipboardHistory = {
     hs.eventtap.keyStrokes(previous)
   end),
 }
--- Keep machine-specific shortcuts outside the repository.
-local localConfig = hs.configdir .. "/init.local.lua"
-if hs.fs.attributes(localConfig, "mode") == "file" then
-  local ok, message = pcall(dofile, localConfig)
-  if not ok then
-    hs.printf("Local Hammerspoon config failed: %s", message)
-  end
-end
