@@ -368,8 +368,7 @@ Zellij uses the `Ctrl-b` prefix below for pane navigation.
 Install or update with `brew bundle` and `./stow_all.sh`, then open Hammerspoon.
 The installer stops if an existing Hammerspoon config conflicts; back it up and
 merge it before rerunning.
-Machine-specific shortcuts can live in `~/.hammerspoon/init.local.lua`; the
-tracked config loads that file when present. Keep it outside the repo.
+The Hammerspoon config provides only the clipboard shortcut.
 
 Cmd-C, Cmd-X, and Cmd-V keep their normal behaviour. Ctrl-V inserts the previous
 copied or cut text as plain text without changing the system clipboard. For
