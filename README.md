@@ -275,6 +275,7 @@ and [GitLab SSH setup](https://docs.gitlab.com/user/ssh/).
 - AeroSpace: `~/.aerospace.toml`
 - Borders: `~/.config/borders/bordersrc`
 - Ghostty: `~/.config/ghostty/config`
+- Hammerspoon: `~/.hammerspoon/init.lua`
 - LazyGit: `~/.config/lazygit/config.yml`
 - LazyVim: `~/.config/nvim`
 - SketchyBar: `~/.config/sketchybar`
@@ -285,6 +286,8 @@ and [GitLab SSH setup](https://docs.gitlab.com/user/ssh/).
 ## After Install
 
 - Grant Accessibility permissions to AeroSpace, SketchyBar, and Borders in macOS Settings.
+- Open Hammerspoon, grant Accessibility permission, and enable **Launch Hammerspoon
+  at login** in its preferences. Use **Reload Config** from its menu after changes.
 - Open AeroSpace once and grant its requested permissions. AeroSpace starts at login.
 - Homebrew services start SketchyBar and Borders at login; AeroSpace does not launch them.
   Check them with `brew services list`. If migrating from the old startup setup,
@@ -359,6 +362,26 @@ AeroSpace uses `Alt-h/j/k/l` to focus windows and `Alt-Shift-h/j/k/l` to move
 them. These global bindings take precedence over terminal applications. Neovim
 provides `Space m j` / `Space m k` to move lines or visual selections down / up;
 Zellij uses the `Ctrl-b` prefix below for pane navigation.
+
+## Hammerspoon clipboard
+
+Install or update with `brew bundle` and `./stow_all.sh`, then open Hammerspoon.
+The installer stops if an existing Hammerspoon config conflicts; back it up and
+merge it before rerunning.
+Machine-specific shortcuts can live in `~/.hammerspoon/init.local.lua`; the
+tracked config loads that file when present. Keep it outside the repo.
+
+Cmd-C, Cmd-X, and Cmd-V keep their normal behaviour. Ctrl-V inserts the previous
+copied or cut text as plain text without changing the system clipboard. For
+example, copy `foo`, then `bar`: Cmd-V pastes `bar`, Ctrl-V inserts `foo`, and
+Cmd-V still pastes `bar`. Repeated Ctrl-V inserts `foo` again.
+
+The two most recent text copies stay in memory only and reset on config reload
+or exit. Images and files are not stored in the second slot. Clipboard changes
+are checked every 0.1 seconds; copies made faster than that may be missed.
+Ctrl-V applies globally, replacing app bindings such as terminal quoted insert
+and Neovim visual block mode while Hammerspoon is running. macOS Secure Input
+can prevent the shortcut from working.
 
 ## Zellij
 
